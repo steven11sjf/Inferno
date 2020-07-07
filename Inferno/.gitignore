@@ -1,0 +1,5 @@
+# Files or folders in this file are ignored and not pushed to the git, useful for local and temp files
+# * is a wildcard so you could use `*.o*` to ignore object files
+# It ignores any blank lines or lines starting with a # (comments) like this one
+
+Temp/*
