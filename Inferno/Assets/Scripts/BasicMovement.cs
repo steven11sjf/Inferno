@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BasicMovement : MonoBehaviour
 {
+    private const float GUN_COOLDOWN = 0.5f;
+    private const float DASH_COOLDOWN = 5.0f;
+
     // used to change animator state
     public Animator animator;
 
@@ -14,10 +17,15 @@ public class BasicMovement : MonoBehaviour
     private float dashDist; // the distance remaining in the dash
     private Vector3 dashDir; // the direction of the sprint
 
+    private float gunCooldownTime; // the time the gun can fire next
+    private float dashCooldownTime; // the time the dash is available
+
     // Start is called before the first frame update
     void Start()
     {
         dashing = false;
+        gunCooldownTime = 0.0f;
+        dashCooldownTime = 0.0f;
     }
 
     // Update is called once per frame
@@ -31,8 +39,8 @@ public class BasicMovement : MonoBehaviour
         MoveCrosshair();
         if (Dash(movement) != 0) return;
 
-        // shoot if this is the first frame M1 was pressed
-        if (Input.GetMouseButtonDown(0))
+        // shoot if this is the first frame M1 was pressed and gun is off CD
+        if (Input.GetMouseButton(0) && gunCooldownTime < Time.time)
         {
             Shoot();
         }
@@ -67,6 +75,12 @@ public class BasicMovement : MonoBehaviour
 
         // fire bullet in the direction of the crosshair
         bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 5.0f;
+        
+        // destroy bullet 3 seconds after firing
+        Destroy(bullet, 3.0f);
+
+        // set cooldown time
+        gunCooldownTime = Time.time + GUN_COOLDOWN;
     }
 
     /*
@@ -76,7 +90,7 @@ public class BasicMovement : MonoBehaviour
     private int Dash(Vector3 movement)
     {
         // if we are starting a dash
-        if (!dashing && Input.GetKeyDown(KeyCode.Space))
+        if (!dashing && Input.GetKeyDown(KeyCode.Space) && dashCooldownTime < Time.time)
         {
 
             // start the dash
@@ -97,6 +111,7 @@ public class BasicMovement : MonoBehaviour
                 transform.position = transform.position + dashDir * dashDist;
                 dashing = false;
                 animator.SetBool("Dashing", false);
+                dashCooldownTime = Time.time + DASH_COOLDOWN; // set the cd timer
             }
             else // if this is not the last frame of the dash, dash according to time passed
             {
