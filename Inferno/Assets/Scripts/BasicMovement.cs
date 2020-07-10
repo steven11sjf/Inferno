@@ -10,19 +10,26 @@ public class BasicMovement : MonoBehaviour
     public GameObject crosshair; // the crosshair's location
     public GameObject bulletPrefab; // prefab for bullets
 
+    private bool dashing; // true if player is dashing
+    private float dashDist; // the distance remaining in the dash
+    private Vector3 dashDir; // the direction of the sprint
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        dashing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         // get & set horizontal and vertical movement
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+        movement.Normalize();
 
         MoveCrosshair();
+        if (Dash(movement) != 0) return;
 
         // shoot if this is the first frame M1 was pressed
         if (Input.GetMouseButtonDown(0))
@@ -60,5 +67,45 @@ public class BasicMovement : MonoBehaviour
 
         // fire bullet in the direction of the crosshair
         bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 5.0f;
+    }
+
+    /*
+     * Starts or continues a dash
+     * movement is a normalized vector
+     */
+    private int Dash(Vector3 movement)
+    {
+        // if we are starting a dash
+        if (!dashing && Input.GetKeyDown(KeyCode.Space))
+        {
+
+            // start the dash
+            dashing = true;
+            animator.SetBool("Dashing", true);
+
+            // set the direction vector and distance
+            dashDir = movement;
+            dashDist = 0.3f;
+
+            return 1;
+        }
+        else if (dashing) // if we are mid-dash
+        {
+            float t = Time.deltaTime; // get time
+            if (dashDist < t) // if this is the last frame of the dash, dash the remaining distance and end the dash
+            {
+                transform.position = transform.position + dashDir * dashDist;
+                dashing = false;
+                animator.SetBool("Dashing", false);
+            }
+            else // if this is not the last frame of the dash, dash according to time passed
+            {
+                transform.position = transform.position + dashDir * t * 3.0f;
+                dashDist -= t;
+            }
+            return 1;
+        }
+
+        return 0; // if we are not dashing
     }
 }
