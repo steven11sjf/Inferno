@@ -382,6 +382,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1313631228}
+    - target: {fileID: 1914534416743400078, guid: 0e58cdce79388c8429328a7bf960b787,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1914534416743400079, guid: 0e58cdce79388c8429328a7bf960b787,
         type: 3}
       propertyPath: m_Name

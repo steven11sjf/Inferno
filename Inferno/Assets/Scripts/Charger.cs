@@ -32,14 +32,19 @@ public class Charger : MonoBehaviour
         if(charging == 0) // not charging
         {
             // raycast to check if player is in line of sight
-            RaycastHit2D hit;
-            hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position);
+            RaycastHit2D[] hits = Physics2D.LinecastAll(transform.position, player.transform.position);
 
-            if(hit.collider.gameObject.tag == "Player")
+            foreach (RaycastHit2D hit in hits)
             {
-                // start windup and set charge time
-                charging = 1;
-                chargeTimer = Time.time + 1.0f;
+                GameObject other = hit.collider.gameObject;
+                if (other.CompareTag("Walls")) break; // walls break los
+                if(other.CompareTag("Player"))
+                {
+                    // start windup and set charge time
+                    charging = 1;
+                    chargeTimer = Time.time + CHARGE_WINDUP;
+                    break;
+                }
             }
         }
         else if(charging == 1) // winding up
