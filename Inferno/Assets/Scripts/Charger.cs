@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChargerMovementAttacking : MonoBehaviour
+public class Charger : MonoBehaviour
 {
 
     public GameObject player;
+
+    public float CHARGE_SPEED; // how fast the charge goes
+    public float CHARGE_TIME; // how long the charge will naturally go
+    public float CHARGE_WINDUP; // the windup animation time
+    public float CHARGE_STUN; // the amount of time stunned when you miss
+    public float CHARGE_TURN_RADIUS; // the turn radius of the charge 
+    public float CHARGE_OVERCHARGE_TIME; // how long the charger continues to charge after missing
 
     private int charging;
     private float chargeTimer;
@@ -21,11 +28,19 @@ public class ChargerMovementAttacking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if(charging == 0) // not charging
         {
-            // start windup and set charge time
-            charging = 1;
-            chargeTimer = Time.time + 1.0f;
+            // raycast to check if player is in line of sight
+            RaycastHit2D hit;
+            hit = Physics2D.Raycast(transform.position, player.transform.position - transform.position);
+
+            if(hit.collider.gameObject.tag == "Player")
+            {
+                // start windup and set charge time
+                charging = 1;
+                chargeTimer = Time.time + 1.0f;
+            }
         }
         else if(charging == 1) // winding up
         {
@@ -38,7 +53,7 @@ public class ChargerMovementAttacking : MonoBehaviour
 
                 // start the charge and set the timer
                 charging = 2;
-                chargeTimer = Time.time + 2.0f;
+                chargeTimer = Time.time + CHARGE_TIME;
             }
         }
         else if(charging == 2) // charging
@@ -58,8 +73,8 @@ public class ChargerMovementAttacking : MonoBehaviour
             if (Vector3.Dot(chargeDir, curDir) < 0.5f)
             {
                 charging = 3; // overcharge
-                chargeTimer = Time.time + 0.25f;
-                transform.position = transform.position + chargeDir * Time.deltaTime * 1.5f;
+                chargeTimer = Time.time + CHARGE_OVERCHARGE_TIME;
+                transform.position = transform.position + chargeDir * Time.deltaTime * CHARGE_SPEED;
             }
 
             // calculate charge (dot) (current rotated 90 deg counterclockwise)
@@ -67,24 +82,24 @@ public class ChargerMovementAttacking : MonoBehaviour
             
             if(dot > 0) // need rightwards adjustment
             {
-                chargeDir = Quaternion.Euler(0.0f, 0.0f, -0.25f) * chargeDir;
+                chargeDir = Quaternion.Euler(0.0f, 0.0f, -CHARGE_TURN_RADIUS * Time.deltaTime) * chargeDir;
             }
             else if(dot < 0) // need leftwards adjustment
             {
-                chargeDir = Quaternion.Euler(0.0f, 0.0f, 0.25f) * chargeDir;
+                chargeDir = Quaternion.Euler(0.0f, 0.0f, CHARGE_TURN_RADIUS * Time.deltaTime) * chargeDir;
             }
 
-            transform.position = transform.position + chargeDir * Time.deltaTime * 2.0f;
+            transform.position = transform.position + chargeDir * Time.deltaTime * CHARGE_SPEED;
         }
         else if(charging == 3) // overcharge
         {
             if(chargeTimer < Time.time)
             {
                 charging = 4;
-                chargeTimer = Time.time + 1.0f;
+                chargeTimer = Time.time + CHARGE_STUN;
             }
 
-            transform.position = transform.position + chargeDir * Time.deltaTime * 2.0f;
+            transform.position = transform.position + chargeDir * Time.deltaTime * CHARGE_SPEED;
         }
         else if(charging == 4) // stun
         {
