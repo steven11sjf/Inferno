@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicMovement : MonoBehaviour
+public class Daniel : MonoBehaviour
 {
-    private const float GUN_COOLDOWN = 0.5f;
-    private const float DASH_COOLDOWN = 5.0f;
+    public float GUN_COOLDOWN = 0.5f;
+
+    public float DASH_COOLDOWN = 5.0f;
+    public float DASH_SPEED = 3.0f;
+    public float DASH_TIME;
 
     // used to change animator state
     public Animator animator;
+
+    // used to track player health
+    public Health health;
 
     public GameObject crosshair; // the crosshair's location
     public GameObject bulletPrefab; // prefab for bullets
@@ -71,10 +77,12 @@ public class BasicMovement : MonoBehaviour
         danielToCrosshair.Normalize();
 
         // instantiate a new bullet from the center of daniel
-        GameObject bullet = Instantiate(bulletPrefab, transform.position + new Vector3(0.15f, -0.15f, 0.0f), Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
         // fire bullet in the direction of the crosshair
-        bullet.GetComponent<Rigidbody2D>().velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 5.0f;
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        bulletScript.velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 5.0f;
+        bulletScript.player = gameObject;
         
         // destroy bullet 3 seconds after firing
         Destroy(bullet, 3.0f);
@@ -99,7 +107,7 @@ public class BasicMovement : MonoBehaviour
 
             // set the direction vector and distance
             dashDir = movement;
-            dashDist = 0.3f;
+            dashDist = DASH_TIME;
 
             return 1;
         }
@@ -108,19 +116,35 @@ public class BasicMovement : MonoBehaviour
             float t = Time.deltaTime; // get time
             if (dashDist < t) // if this is the last frame of the dash, dash the remaining distance and end the dash
             {
-                transform.position = transform.position + dashDir * dashDist;
+                transform.position = transform.position + dashDir * dashDist * DASH_SPEED;
                 dashing = false;
                 animator.SetBool("Dashing", false);
                 dashCooldownTime = Time.time + DASH_COOLDOWN; // set the cd timer
             }
             else // if this is not the last frame of the dash, dash according to time passed
             {
-                transform.position = transform.position + dashDir * t * 3.0f;
+                transform.position = transform.position + dashDir * t * DASH_SPEED;
                 dashDist -= t;
             }
             return 1;
         }
 
         return 0; // if we are not dashing
+    }
+
+    void OnCollisionEnter2D (Collision2D col)
+    {
+        Debug.Log("Collided");
+        // get the other object
+        GameObject other = col.gameObject;
+
+        // if it's an enemy take melee damage
+        if(other.CompareTag("Enemies"))
+        {
+            float dmg = other.GetComponent<Health>().GetMeleeDamage();
+            health.Damage(dmg);
+        }
+
+        // TODO healthpacks and walls interactions
     }
 }
