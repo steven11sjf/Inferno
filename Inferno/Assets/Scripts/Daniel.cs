@@ -136,7 +136,6 @@ public class Daniel : MonoBehaviour
 
     void OnCollisionEnter2D (Collision2D col)
     {
-        Debug.Log("Collided");
         // get the other object
         GameObject other = col.gameObject;
 

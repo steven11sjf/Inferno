@@ -116,7 +116,7 @@ public class Charger : MonoBehaviour
             {
                 charging = 4;
                 animator.SetInteger("ChargerState", 4);
-                chargeTimer = Time.time + CHARGE_STUN;
+                chargeTimer = Time.time;
             }
 
             rb.velocity = new Vector2(chargeDir.x, chargeDir.y) * CHARGE_SPEED;
@@ -158,7 +158,6 @@ public class Charger : MonoBehaviour
         {
             Vector3 normal = col.contacts[0].normal;
             Vector3 vel = rb.velocity;
-            Debug.Log("Velocity: (" + chargeDir.x.ToString() + ", " + chargeDir.y.ToString() + ")");
             Debug.Log("Angle: " + Vector3.Angle(chargeDir, -normal).ToString());
             if(Vector3.Angle(vel, -normal) > COLLISION_SLIDE_ANGLE)
             {
