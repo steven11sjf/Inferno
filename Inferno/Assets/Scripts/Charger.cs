@@ -50,6 +50,13 @@ public class Charger : MonoBehaviour
         }
         else if(charging == 1) // winding up
         {
+            if (CanSeePlayer())
+            {
+                // get direction of charge
+                chargeDir = player.transform.position - transform.position;
+                chargeDir.Normalize();
+            }
+
             // check timer
             if(Time.time > chargeTimer)
             {

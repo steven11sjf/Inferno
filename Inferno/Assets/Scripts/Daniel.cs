@@ -149,4 +149,10 @@ public class Daniel : MonoBehaviour
 
         // TODO healthpacks and walls interactions
     }
+
+    void OnGUI()
+    {
+        string str = "Current Health: " + health.GetHealth().ToString();
+        GUI.Label(new Rect(10, 10, 150, 20), str);
+    }
 }

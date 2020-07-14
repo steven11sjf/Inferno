@@ -24,6 +24,12 @@ public class Health : MonoBehaviour
         return meleeDamage;
     }
 
+    // Returns the unit's current health
+    public float GetHealth()
+    {
+        return currHealth;
+    }
+
     // Decreases the object's health
     public void Damage(float dmg)
     {
