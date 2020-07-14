@@ -105,6 +105,7 @@ MonoBehaviour:
   DASH_TIME: 0.3
   animator: {fileID: 518756264426046437}
   health: {fileID: 3018339532737159114}
+  rb: {fileID: 1117563342278877342}
   crosshair: {fileID: 0}
   bulletPrefab: {fileID: 3910270944117973169, guid: 1739e4fb054e4774894ebc6544a0f06b,
     type: 3}
@@ -175,14 +176,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 518756264426046489}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1

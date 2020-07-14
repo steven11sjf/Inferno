@@ -16,6 +16,9 @@ public class Daniel : MonoBehaviour
     // used to track player health
     public Health health;
 
+    // used to utilise the physics engine
+    public Rigidbody2D rb;
+
     public GameObject crosshair; // the crosshair's location
     public GameObject bulletPrefab; // prefab for bullets
 
@@ -56,8 +59,7 @@ public class Daniel : MonoBehaviour
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Magnitude", movement.magnitude);
 
-        // update Daniel's position
-        transform.position = transform.position + movement * Time.deltaTime;
+        rb.velocity = new Vector2(movement.x, movement.y);
 
     }
 

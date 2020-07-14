@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5661616964072455498}
   - component: {fileID: 1334935968473855497}
   - component: {fileID: -3201797667995718194}
+  - component: {fileID: -9025589136004764479}
   m_Layer: 0
   m_Name: Charger
   m_TagString: Enemies
@@ -99,12 +100,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  CHARGE_SPEED: 2.5
+  rb: {fileID: -3201797667995718194}
+  animator: {fileID: -9025589136004764479}
+  CHARGE_SPEED: 3
   CHARGE_TIME: 2
-  CHARGE_WINDUP: 1
-  CHARGE_STUN: 1
-  CHARGE_TURN_RADIUS: 25
+  CHARGE_WINDUP: 2
+  CHARGE_STUN: 4
+  CHARGE_TURN_RADIUS: 35
   CHARGE_OVERCHARGE_TIME: 0.4
+  REBOUND_SPEED: 2
+  COLLISION_SLIDE_ANGLE: 60
 --- !u!61 &5661616964072455498
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -153,16 +158,35 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914534416743400079}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!95 &-9025589136004764479
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914534416743400079}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2426cad1b7a01da4aa39de1cebea5956, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
