@@ -5,7 +5,7 @@ using UnityEngine;
 public class Daniel : MonoBehaviour
 {
     public float GUN_COOLDOWN = 0.5f;
-
+    public float BULLET_SPEED = 5.0f;
     public float DASH_COOLDOWN = 5.0f;
     public float DASH_SPEED = 3.0f;
     public float DASH_TIME;
@@ -83,8 +83,8 @@ public class Daniel : MonoBehaviour
 
         // fire bullet in the direction of the crosshair
         Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 5.0f;
-        bulletScript.player = gameObject;
+        bulletScript.velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * BULLET_SPEED;
+        bulletScript.instantiator = gameObject;
         
         // destroy bullet 3 seconds after firing
         Destroy(bullet, 3.0f);
