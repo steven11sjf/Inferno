@@ -85,6 +85,7 @@ public class Daniel : MonoBehaviour
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         bulletScript.velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * BULLET_SPEED;
         bulletScript.instantiator = gameObject;
+        bulletScript.damage = 5.0f;
         
         // destroy bullet 3 seconds after firing
         Destroy(bullet, 3.0f);

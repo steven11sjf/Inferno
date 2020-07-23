@@ -55,8 +55,7 @@ public class Shooter : MonoBehaviour
                 if(Time.time > timer)
                 {
                     timer = Time.time + Random.Range(MIN_STRAFE_TURN_TIME, MAX_STRAFE_TURN_TIME); // set the time until strafe turns again
-                    if (Random.value > 0.5) // turn around 50% of the time
-                        strafeDir = -strafeDir;
+                    strafeDir = -strafeDir;
                 }
 
                 // run "around" the player
@@ -165,7 +164,6 @@ public class Shooter : MonoBehaviour
             // get a normalized vector pointing from shooter to Daniel
             Vector3 shot = player.transform.position - transform.position;
             shot.Normalize();
-            Debug.Log(shot.ToString());
 
             // instantiate a new bullet
             GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
@@ -174,6 +172,7 @@ public class Shooter : MonoBehaviour
             Bullet bulletScript = bullet.GetComponent<Bullet>();
             bulletScript.velocity = new Vector2(shot.x, shot.y) * BULLET_SPEED;
             bulletScript.instantiator = gameObject;
+            bulletScript.damage = 7.5f;
 
             // destroy bullet 3 seconds after firing
             Destroy(bullet, 3.0f);

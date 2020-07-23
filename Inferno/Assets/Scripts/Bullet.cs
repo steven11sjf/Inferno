@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
 
     public Vector2 velocity = new Vector2(0.0f, 0.0f);
     public GameObject instantiator;
+    public float damage;
 
     // Start is called before the first frame update
     void Start()
@@ -37,14 +38,14 @@ public class Bullet : MonoBehaviour
 
                 if (other.CompareTag("Enemies"))
                 {
-                    other.GetComponent<Health>().Damage(5.0f);
+                    other.GetComponent<Health>().Damage(damage);
                     Destroy(gameObject);
                     break;
                 }
 
                 if (other.CompareTag("Player"))
                 {
-                    other.GetComponent<Health>().Damage(5.0f);
+                    other.GetComponent<Health>().Damage(damage);
                     Destroy(gameObject);
                     break;
                 }
