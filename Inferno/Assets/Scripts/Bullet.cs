@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
 
     public Vector2 velocity = new Vector2(0.0f, 0.0f);
-    public GameObject player;
+    public GameObject instantiator;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
         foreach (RaycastHit2D hit in hits)
         {
             GameObject other = hit.collider.gameObject;
-            if (other != player)
+            if (other != instantiator)
             {
                 if (other.CompareTag("Walls"))
                 {
@@ -36,6 +36,13 @@ public class Bullet : MonoBehaviour
                 }
 
                 if (other.CompareTag("Enemies"))
+                {
+                    other.GetComponent<Health>().Damage(5.0f);
+                    Destroy(gameObject);
+                    break;
+                }
+
+                if (other.CompareTag("Player"))
                 {
                     other.GetComponent<Health>().Damage(5.0f);
                     Destroy(gameObject);
