@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Daniel : MonoBehaviour
 {
-    public float GUN_COOLDOWN = 0.5f;
-    public float BULLET_SPEED = 5.0f;
     public float DASH_COOLDOWN = 5.0f;
     public float DIVE_SPEED = 4.0f;
     public float DIVE_TIME;
@@ -18,6 +16,9 @@ public class Daniel : MonoBehaviour
     // used to track player health
     public Health health;
 
+    // used to shoot and change weapons
+    public Guns guns;
+
     // used to utilise the physics engine
     public Rigidbody2D rb;
 
@@ -27,15 +28,12 @@ public class Daniel : MonoBehaviour
     public int dashing; // 0 = not dashing, 1 = diving, 2 = rolling
     private float dashDist; // the distance remaining in the dash
     private Vector3 dashDir; // the direction of the sprint
-
-    private float gunCooldownTime; // the time the gun can fire next
     private float dashCooldownTime; // the time the dash is available
 
     // Start is called before the first frame update
     void Start()
     {
         dashing = 0;
-        gunCooldownTime = 0.0f;
         dashCooldownTime = 0.0f;
     }
 
@@ -51,9 +49,9 @@ public class Daniel : MonoBehaviour
         if (Dash(movement) != 0) return;
 
         // shoot if this is the first frame M1 was pressed and gun is off CD
-        if (Input.GetMouseButton(0) && gunCooldownTime < Time.time)
+        if (Input.GetMouseButton(0))
         {
-            Shoot();
+            guns.Shoot();
         }
 
         // set animator variables
@@ -72,28 +70,6 @@ public class Daniel : MonoBehaviour
         aim = Camera.main.ScreenToWorldPoint(aim);
         Vector3 followXOnly = new Vector3(aim.x, aim.y, transform.position.z);
         crosshair.transform.position = followXOnly;
-    }
-
-    private void Shoot()
-    {
-        // get a normalized vector pointing from Daniel to the crosshair
-        Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
-        danielToCrosshair.Normalize();
-
-        // instantiate a new bullet from the center of daniel
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-
-        // fire bullet in the direction of the crosshair
-        Bullet bulletScript = bullet.GetComponent<Bullet>();
-        bulletScript.velocity = new Vector2(danielToCrosshair.x, danielToCrosshair.y) * BULLET_SPEED;
-        bulletScript.instantiator = gameObject;
-        bulletScript.damage = 5.0f;
-        
-        // destroy bullet 3 seconds after firing
-        Destroy(bullet, 3.0f);
-
-        // set cooldown time
-        gunCooldownTime = Time.time + GUN_COOLDOWN;
     }
 
     /*
@@ -140,9 +116,9 @@ public class Daniel : MonoBehaviour
                 dashDist -= t;
             }
 
-            if (Input.GetMouseButton(0) && gunCooldownTime < Time.time)
+            if (Input.GetMouseButton(0))
             {
-                Shoot();
+                guns.Shoot();
             }
             return 1;
         }
