@@ -19440,6 +19440,21 @@ PrefabInstance:
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 339007819}
+    - target: {fileID: 518756264426046488, guid: 3085497233b9172418bc5d2267dbd861,
+        type: 3}
+      propertyPath: DIVE_TIME
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 518756264426046488, guid: 3085497233b9172418bc5d2267dbd861,
+        type: 3}
+      propertyPath: ROLL_TIME
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 518756264426046488, guid: 3085497233b9172418bc5d2267dbd861,
+        type: 3}
+      propertyPath: DIVE_SPEED
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 518756264426046489, guid: 3085497233b9172418bc5d2267dbd861,
         type: 3}
       propertyPath: m_Name
@@ -19721,6 +19736,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Shooter
+      objectReference: {fileID: 0}
+    - target: {fileID: 3669429162304718897, guid: cce6c6fcb12bf2e408df6465c514798f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3669429162304718898, guid: cce6c6fcb12bf2e408df6465c514798f,
         type: 3}

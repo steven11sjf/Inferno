@@ -7,8 +7,10 @@ public class Daniel : MonoBehaviour
     public float GUN_COOLDOWN = 0.5f;
     public float BULLET_SPEED = 5.0f;
     public float DASH_COOLDOWN = 5.0f;
-    public float DASH_SPEED = 3.0f;
-    public float DASH_TIME;
+    public float DIVE_SPEED = 4.0f;
+    public float DIVE_TIME;
+    public float ROLL_SPEED = 2.0f;
+    public float ROLL_TIME;
 
     // used to change animator state
     public Animator animator;
@@ -22,7 +24,7 @@ public class Daniel : MonoBehaviour
     public GameObject crosshair; // the crosshair's location
     public GameObject bulletPrefab; // prefab for bullets
 
-    private bool dashing; // true if player is dashing
+    public int dashing; // 0 = not dashing, 1 = diving, 2 = rolling
     private float dashDist; // the distance remaining in the dash
     private Vector3 dashDir; // the direction of the sprint
 
@@ -32,7 +34,7 @@ public class Daniel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dashing = false;
+        dashing = 0;
         gunCooldownTime = 0.0f;
         dashCooldownTime = 0.0f;
     }
@@ -101,32 +103,65 @@ public class Daniel : MonoBehaviour
     private int Dash(Vector3 movement)
     {
         // if we are starting a dash
-        if (!dashing && Input.GetKeyDown(KeyCode.Space) && dashCooldownTime < Time.time)
+        if (dashing == 0 && Input.GetKeyDown(KeyCode.Space) && dashCooldownTime < Time.time)
         {
 
             // start the dash
-            dashing = true;
-            animator.SetBool("Dashing", true);
+            dashing = 1;
+            animator.SetInteger("DashState", 1);
 
             // set the direction vector and distance
             dashDir = movement;
-            dashDist = DASH_TIME;
+            dashDist = DIVE_TIME;
 
-            return 1;
+            return 0;
         }
-        else if (dashing) // if we are mid-dash
+        else if (dashing == 1) // if we are mid-dive
         {
             float t = Time.deltaTime; // get time
-            if (dashDist < t) // if this is the last frame of the dash, dash the remaining distance and end the dash
+            if (dashDist < t) // if this is the last frame of the dive, dive the remaining distance and roll
             {
-                transform.position = transform.position + dashDir * dashDist * DASH_SPEED;
-                dashing = false;
-                animator.SetBool("Dashing", false);
-                dashCooldownTime = Time.time + DASH_COOLDOWN; // set the cd timer
+                //transform.position = transform.position + dashDir * dashDist * DIVE_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * DIVE_SPEED;
+                Debug.Log(rb.velocity);
+                dashing = 2;
+                dashDist = ROLL_TIME;
+
+                animator.SetInteger("DashState", 2);
+
+                //dashing = false;
+                //animator.SetBool("Dashing", false);
+                //dashCooldownTime = Time.time + DASH_COOLDOWN; // set the cd timer
             }
-            else // if this is not the last frame of the dash, dash according to time passed
+            else // if this is not the last frame of the dive, dive according to time passed
             {
-                transform.position = transform.position + dashDir * t * DASH_SPEED;
+                //transform.position = transform.position + dashDir * t * DIVE_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * DIVE_SPEED;
+                dashDist -= t;
+            }
+
+            if (Input.GetMouseButton(0) && gunCooldownTime < Time.time)
+            {
+                Shoot();
+            }
+            return 1;
+        }
+        else if (dashing == 2) // if we are recovering
+        {
+            float t = Time.deltaTime; // get time
+            if (dashDist < t) // if this is the last frame of the roll, roll the remaining distance and end dive
+            {
+                //transform.position = transform.position + dashDir * dashDist * ROLL_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * ROLL_SPEED;
+
+                dashing = 0;
+                animator.SetInteger("DashState", 0);
+                dashCooldownTime = t + DASH_COOLDOWN; // set the cd timer
+            }
+            else
+            {
+                //transform.position = transform.position + dashDir * t * ROLL_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * ROLL_SPEED;
                 dashDist -= t;
             }
             return 1;
