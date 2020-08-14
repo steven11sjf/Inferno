@@ -10,7 +10,7 @@ struct Melee
         damage = weaponDamage;
         length = weaponLength;
         start = startingAngle;
-        swingLength = angleLength;
+        swingLength = Mathf.Abs(angleLength / swingSpeed);
         speed = swingSpeed;
         recovery = recoveryTime;
     }
@@ -31,7 +31,6 @@ public class MeleeWeapons : MonoBehaviour
     public GameObject swordPrefab;
 
     public int numMelees = 2;
-    public bool swinging;
 
     private Melee[] melees;
     private float nextSwing; // next time melee is available to swing
@@ -42,9 +41,8 @@ public class MeleeWeapons : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        swinging = false;
         melees = new Melee[numMelees];
-        melees[0] = new Melee("Dagger", 80.0f, 1.0f, -0.01f, 0.02f, 0.05f, 0.5f);
+        melees[0] = new Melee("Sword", 15.0f, 3.0f, 90.0f, 180.0f, -1080.0f, 0.5f);
         melees[1] = new Melee("Sword", 60.0f, 2.0f, -90.0f, 180.0f, 180.0f, 1.0f);
 
         equippedMelee = 0;
@@ -54,20 +52,23 @@ public class MeleeWeapons : MonoBehaviour
     public void Swing()
     {
         // validate that swing is available
-        if (swinging || Time.time < nextSwing) return;
+        if (Time.time < nextSwing) return;
 
-        swinging = true;
 
         Vector3 DanielToCrosshair = crosshair.transform.position - transform.position;
         DanielToCrosshair.Normalize();
 
+        float angle = Vector3.SignedAngle(Vector3.up, DanielToCrosshair, Vector3.forward);
+
         // start at offset
-        Vector3 startingPosition = Quaternion.AngleAxis(melees[equippedMelee].start, Vector3.forward) * DanielToCrosshair;
-        GameObject sword = Instantiate(swordPrefab, transform.position, Quaternion.identity);
+        Quaternion rotation = Quaternion.Euler(0, 0, angle + melees[equippedMelee].start);
+        GameObject sword = Instantiate(swordPrefab, transform.position, rotation);
         Sword swordScript = sword.GetComponent<Sword>();
+        swordScript.player = gameObject;
         swordScript.speed = melees[equippedMelee].speed;
-        swordScript.swingLength = melees[equippedMelee].swingLength;
-        swordScript.length = melees[equippedMelee].length;
+
+        // destroy sword after swing length
+        Destroy(sword, melees[equippedMelee].swingLength + 0.032f);
 
         // set recovery
         nextSwing = Time.time + melees[equippedMelee].recovery;

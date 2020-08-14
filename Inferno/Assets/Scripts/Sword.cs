@@ -7,18 +7,19 @@ public class Sword : MonoBehaviour
     public Rigidbody2D rb;
     public GameObject player;
 
-    public float length;
-    public float speed;
-    public float damage;
-    public float swingLength;
+    public float length = 3.0f;
+    public float speed = -1440.0f;
+    public float damage = 20.0f;
+    public float swingLength = 180.0f;
 
     private float lengthRemaining;
-    private float init;
+    public float initAngle;
 
     // Start is called before the first frame update
     void Start()
     {
-        init = rb.rotation;
+        //Debug.Log(initAngle);
+        //rb.rotation = initAngle;
         lengthRemaining = swingLength;
         transform.position = player.transform.position;
     }
@@ -26,15 +27,6 @@ public class Sword : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //float angle = Mathf.LerpAngle(init, swingLength, speed * Time.deltaTime);
-        //rb.MoveRotation(angle);
-
-        //if (angle == swingLength)
-        //{
-        //    init = rb.rotation;
-        //    swingLength += 100;
-        //}
-
         rb.rotation += Time.deltaTime * speed;
         transform.position = player.transform.position;
     }
