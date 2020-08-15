@@ -28,9 +28,9 @@ First, create an issue in github. Navigate to [the repository](www.github.com/hy
 
 Next, make sure your local repository is up to date by navigation to `/c/Inferno` in git bash and running `git pull`. Now create a branch using `git checkout -b <new-branch>`. The branch naming convention we use is <label>/<issue-number>-<description>. For example, the branch I'm using for this documentation change is `documentation/10-readme-changes`. 
 
-Next, implement your changes. This should be straightforward; open Unity and change whatever you were going to. Don't forget to save both the .cs files and the Unity scene (press ctrl-S in the editor). 
+Next, implement your changes. ***CHECK THE BLUE TEXT ON THE TERMINAL TO MAKE SURE YOU'RE IN THE RIGHT BRANCH!*** It's a total pain in the ass to move staged/committed changes to another branch if you didn't realize you're still in dev or master. This should be straightforward; open Unity and change whatever you were going to. Don't forget to save both the .cs files and the Unity scene (press ctrl-S in the editor). 
 
-Now, commit your changes to the branch. Go to git bash and type `git commit` and it will open a vim file for you to edit. Ignore the commented lines with a # in front of them. Press `i` to enter edit mode. 
+Now, commit your changes to the branch. Go to git bash and type `git status` to check the status of the branch. You'll see a lot of red which is good, it's the files you've changed. Stage your files by typing `git add -A` then `git status` again, they should all be green now which is a pogchamp moment. Next, type `git commit` and it will open a vim file for you to edit. Ignore the commented lines with a # in front of them. Press `i` to enter edit mode. 
 
 The commit format we're using is:
 
