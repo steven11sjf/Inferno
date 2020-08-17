@@ -84,7 +84,7 @@ public class Guns : MonoBehaviour
         guns[1] = new global::Gun("Shotgun", 3.0f, 2.0f, 10.0f, 10.0f, 20);
         guns[2] = new global::Gun("SMG", 4.0f, 0.1f, 2.5f, 3.0f, 1);
 
-        ChangeGun(1); // auto-equip pistol
+        ChangeGun(0); // auto-equip pistol
     }
 
     /*
