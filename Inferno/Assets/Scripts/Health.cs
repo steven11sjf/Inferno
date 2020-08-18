@@ -6,6 +6,9 @@ public class Health : MonoBehaviour
 {
     // the initial health level
     public float maxHealth;
+
+    // the gamelogic object
+    public GameLogic gameLogic;
     // the unit's melee damage
     public float meleeDamage;
 
@@ -50,7 +53,14 @@ public class Health : MonoBehaviour
     // Kills the object
     void Die()
     {
-        Debug.Log("Dead!");
-        gameObject.SetActive(false);
+        if (gameObject.CompareTag("Player"))
+        {
+            gameLogic.PlayerDeath();
+        }
+        else
+        {
+            Debug.Log("Dead!");
+            gameObject.SetActive(false);
+        }
     }
 }
