@@ -51,6 +51,11 @@ public class Daniel : MonoBehaviour
         MoveCrosshair();
         if (Dash(movement) != 0) return;
 
+        // interact if this is the first frame E was pressed
+        if (Input.GetKeyDown("e"))
+        {
+            Interact();
+        }
         // shoot if this is the first frame M1 was pressed
         if (Input.GetMouseButton(0))
         {
@@ -159,6 +164,30 @@ public class Daniel : MonoBehaviour
         }
 
         // TODO healthpacks and walls interactions
+    }
+
+    void Interact()
+    {
+        // get a normalized vector pointing from Daniel to the crosshair
+        Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
+        danielToCrosshair.Normalize();
+
+        // get current position and endpoint of detection raycast
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        Vector2 raycastEnd = currentPosition + new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 0.5f;
+
+        // raycast the line and store in hits[]
+        RaycastHit2D[] hits = Physics2D.LinecastAll(currentPosition, raycastEnd);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            GameObject other = hit.collider.gameObject;
+            if(other.CompareTag("NPCs"))
+            {
+                Debug.Log("Hit NPC");
+            }
+        }
+        
     }
 
     void OnGUI()
