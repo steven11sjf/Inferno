@@ -51,11 +51,6 @@ public class Daniel : MonoBehaviour
         MoveCrosshair();
         if (Dash(movement) != 0) return;
 
-        // interact if this is the first frame E was pressed
-        if (Input.GetKeyDown("e"))
-        {
-            Interact();
-        }
         // shoot if this is the first frame M1 was pressed
         if (Input.GetMouseButton(0))
         {
@@ -166,7 +161,7 @@ public class Daniel : MonoBehaviour
         // TODO healthpacks and walls interactions
     }
 
-    void Interact()
+    public void Interact()
     {
         // get a normalized vector pointing from Daniel to the crosshair
         Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
@@ -184,7 +179,9 @@ public class Daniel : MonoBehaviour
             GameObject other = hit.collider.gameObject;
             if(other.CompareTag("NPCs"))
             {
-                Debug.Log("Hit NPC");
+                //Debug.Log("Hit NPC");
+                other.GetComponent<DialogueTrigger>().TriggerDialogue();
+                return;
             }
         }
         
