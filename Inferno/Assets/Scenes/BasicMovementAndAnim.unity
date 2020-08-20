@@ -20255,6 +20255,16 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1117563342278877342, guid: 3085497233b9172418bc5d2267dbd861,
+        type: 3}
+      propertyPath: m_LinearDrag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117563342278877342, guid: 3085497233b9172418bc5d2267dbd861,
+        type: 3}
+      propertyPath: m_Mass
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 3018339532737159114, guid: 3085497233b9172418bc5d2267dbd861,
         type: 3}
       propertyPath: maxHealth
