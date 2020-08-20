@@ -15,6 +15,7 @@ public class GameLogic : MonoBehaviour
     private bool playerAlive; // true = player isn't dead
     private bool won; // true = victoryCondition eliminated
 
+    // the state of the game (gameplay, in dialogue, in a cutscene)
     private int state;
     private static int STATE_GAMEPLAY = 0;
     private static int STATE_DIALOGUE = 1;
@@ -54,12 +55,15 @@ public class GameLogic : MonoBehaviour
         // if paused, no more logic needed
         if (paused) return;
 
+        // check if player is trying to interact
         if (Input.GetKeyDown("e"))
         {
+            // if we are in a gameplay state, attempt to interact
             if (state == STATE_GAMEPLAY)
             {
                 player.GetComponent<Daniel>().Interact();
             }
+            // if we are in a dialogue state, display the next sentence
             else if (state == STATE_DIALOGUE)
             {
                 dialogueManager.DisplayNextSentence();
@@ -89,19 +93,22 @@ public class GameLogic : MonoBehaviour
         // TODO: make menu for retry/menu/whatever
     }
 
+    // starts the given Dialogue and sets GameLogic parameters
     public void StartDialogue(Dialogue dialogue)
     {
         dialogueManager.StartDialogue(dialogue);
         state = STATE_DIALOGUE;
-        Time.timeScale = 0;
+        Time.timeScale = 0; // pause the game while in dialogue
     }
 
+    // called when DialogueManager has no further Dialogue, restarts time
     public void EndDialogue()
     {
         state = STATE_GAMEPLAY;
         Time.timeScale = 1;
     }
 
+    // displays victory or defeat condition
     void OnGUI()
     {
         if (won)

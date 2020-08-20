@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
-    public Text nameText;
-    public Text dialogueText;
+    public Text nameText; // the name text-box on the canvas
+    public Text dialogueText; // the dialogue text box
 
-    private Queue<string> sentences;
+    private Queue<string> sentences; // the current queue of sentences
 
     // Start is called before the first frame update
     void Start()
@@ -18,36 +18,41 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue (Dialogue dialogue)
     {
-        //Debug.Log("Starting conversation with " + dialogue.name);
-
+        // set name
         nameText.text = dialogue.name;
 
         sentences.Clear(); // clear old dialogue
 
+        // fill the queue with given dialogue
         foreach (string sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
         }
 
+        // display the first dialogue window
         DisplayNextSentence();
     }
 
+    // displays the next dialogue in the queue
     public void DisplayNextSentence()
     {
+        // if there is no dialogue left finish the conversation and return to gameplay
         if (sentences.Count == 0)
         {
             EndDialogue();
             return;
         }
 
+        // get the next sentence
         string sentence = sentences.Dequeue();
-        Debug.Log(sentence);
+        
+        // set the dialogue text to sentence
         dialogueText.text = sentence;
     }
 
+    // ends conversation, empties text boxes and calls GameLogic.EndDialogue()
     void EndDialogue()
     {
-        Debug.Log("End of conversation");
         FindObjectOfType<GameLogic>().EndDialogue();
         nameText.text = "";
         dialogueText.text = "";

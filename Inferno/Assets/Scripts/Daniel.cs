@@ -179,7 +179,7 @@ public class Daniel : MonoBehaviour
             GameObject other = hit.collider.gameObject;
             if(other.CompareTag("NPCs"))
             {
-                //Debug.Log("Hit NPC");
+                // trigger dialogue and return
                 other.GetComponent<DialogueTrigger>().TriggerDialogue();
                 return;
             }
