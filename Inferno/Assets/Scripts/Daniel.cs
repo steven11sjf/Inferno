@@ -191,7 +191,7 @@ public class Daniel : MonoBehaviour
             if(other.CompareTag("NPCs"))
             {
                 // trigger dialogue and return
-                other.GetComponent<DialogueTrigger>().TriggerDialogue();
+                other.GetComponent<Conversation>().StartConversation();
                 return;
             }
         }
