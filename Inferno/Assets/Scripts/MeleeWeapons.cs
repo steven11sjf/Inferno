@@ -67,9 +67,6 @@ public class MeleeWeapons : MonoBehaviour
         swordScript.player = gameObject;
         swordScript.speed = melees[equippedMelee].speed;
 
-        // destroy sword after swing length
-        Destroy(sword, melees[equippedMelee].swingLength + 0.032f);
-
         // set recovery
         nextSwing = Time.time + melees[equippedMelee].recovery;
     }

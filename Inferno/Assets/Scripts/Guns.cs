@@ -67,9 +67,6 @@ public class Guns : MonoBehaviour
             bulletScript.velocity = new Vector2(spreadAdjusted.x, spreadAdjusted.y) * guns[selectedGun].speed;
             bulletScript.instantiator = player;
             bulletScript.damage = guns[selectedGun].damage;
-
-            // destroy bullet 3 seconds after firing
-            Destroy(bullet, 3.0f);
         }
 
         // set time until next shot

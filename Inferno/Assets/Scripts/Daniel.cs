@@ -10,6 +10,8 @@ public class Daniel : MonoBehaviour
     public float ROLL_SPEED = 2.0f;
     public float ROLL_TIME;
 
+    private GameLogic gameLogic;
+
     // used to change animator state
     public Animator animator;
 
@@ -36,6 +38,7 @@ public class Daniel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
         dashing = 0;
         dashCooldownTime = 0.0f;
     }
@@ -43,7 +46,9 @@ public class Daniel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay()) return;
+
         // get & set horizontal and vertical movement
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
         movement.Normalize();

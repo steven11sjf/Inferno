@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
+    private GameLogic gameLogic;
 
     public GameObject player;
     public Rigidbody2D rb;
@@ -33,6 +34,8 @@ public class Shooter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
+
         aggression = 0;
         nextShot = 0.0f;
         lastLOS = 0.0f;
@@ -43,7 +46,10 @@ public class Shooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(aggression == 2) // is aggroed
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay()) return;
+
+        if (aggression == 2) // is aggroed
         {
             if (CanSeePlayer())
             {
@@ -173,9 +179,6 @@ public class Shooter : MonoBehaviour
             bulletScript.velocity = new Vector2(shot.x, shot.y) * BULLET_SPEED;
             bulletScript.instantiator = gameObject;
             bulletScript.damage = 7.5f;
-
-            // destroy bullet 3 seconds after firing
-            Destroy(bullet, 3.0f);
 
             // set delay for next shot
             nextShot = Time.time + SHOOTING_DELAY;

@@ -8,6 +8,8 @@ public class DialogueManager : MonoBehaviour
     public Text nameText; // the name text-box on the canvas
     public Text dialogueText; // the dialogue text box
 
+    public Animator animator; // the animator for the dialogue box
+
     private Queue<string> sentences; // the current queue of sentences
 
     // Start is called before the first frame update
@@ -18,6 +20,9 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue (Dialogue dialogue)
     {
+
+        animator.SetBool("IsOpen", true); // open the dialogue
+        
         // set name
         nameText.text = dialogue.name;
 
@@ -53,6 +58,7 @@ public class DialogueManager : MonoBehaviour
     // ends conversation, empties text boxes and calls GameLogic.EndDialogue()
     void EndDialogue()
     {
+        animator.SetBool("IsOpen", false);
         FindObjectOfType<GameLogic>().EndDialogue();
         nameText.text = "";
         dialogueText.text = "";

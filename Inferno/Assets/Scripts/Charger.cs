@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Charger : MonoBehaviour
 {
+    private GameLogic gameLogic;
 
     public GameObject player; // reference to player
     public Rigidbody2D rb; // the rigidbody to access the physics engine
@@ -25,6 +26,7 @@ public class Charger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
         charging = 0;
         animator.SetInteger("ChargerState", 0);
         chargeTimer = 0.0f;
@@ -33,7 +35,10 @@ public class Charger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(charging == 0 && CanSeePlayer()) // not charging
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay()) return;
+
+        if (charging == 0 && CanSeePlayer()) // not charging
         {
             if (CanSeePlayer())
             {
