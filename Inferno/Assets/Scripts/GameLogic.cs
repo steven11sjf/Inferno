@@ -79,9 +79,20 @@ public class GameLogic : MonoBehaviour
     }
 
     // check if game is paused
-    public bool isPaused()
+    public bool IsPaused()
     {
         return paused;
+    }
+
+    public bool DoGameplay()
+    {
+        if (state == STATE_GAMEPLAY) return true;
+        else return false;
+    }
+
+    public int GetState()
+    {
+        return state;
     }
 
     // handle player death
@@ -98,7 +109,6 @@ public class GameLogic : MonoBehaviour
     {
         dialogueManager.StartDialogue(dialogue);
         state = STATE_DIALOGUE;
-        Time.timeScale = 0; // pause the game while in dialogue
     }
 
     // called when DialogueManager has no further Dialogue, restarts time
