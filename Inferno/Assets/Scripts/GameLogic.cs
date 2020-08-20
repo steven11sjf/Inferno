@@ -6,6 +6,7 @@ public class GameLogic : MonoBehaviour
 {
 
     public GameObject player; // the player
+    public Camera cam; // the camera
     public GameObject victoryCondition; // the enemy that needs to be dead for the victory condition
     public DialogueManager dialogueManager; // the dialogue manager
 
@@ -37,6 +38,10 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(state == STATE_GAMEPLAY || state == STATE_DIALOGUE)
+        {
+            cam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        }
         // check if pause is pressed
         if(Input.GetKeyDown("escape") && playerAlive && !won && state == STATE_GAMEPLAY)
         {
