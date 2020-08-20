@@ -67,6 +67,12 @@ public class Daniel : MonoBehaviour
         {
             melees.Swing();
         }
+
+        // hot-swap gun if a number was pressed
+        if (Input.GetKeyDown("1")) guns.ChangeGun(0);
+        else if (Input.GetKeyDown("2")) guns.ChangeGun(1);
+        else if (Input.GetKeyDown("3")) guns.ChangeGun(2);
+
         // set animator variables
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
