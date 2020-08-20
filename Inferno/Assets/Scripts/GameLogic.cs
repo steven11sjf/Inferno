@@ -89,6 +89,7 @@ public class GameLogic : MonoBehaviour
         return paused;
     }
 
+    // true if it is in a state where player and enemies should behave normally
     public bool DoGameplay()
     {
         if (state == STATE_GAMEPLAY) return true;
@@ -114,13 +115,13 @@ public class GameLogic : MonoBehaviour
     {
         dialogueManager.StartDialogue(dialogue);
         state = STATE_DIALOGUE;
+        player.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, 0.0f); // stop player's velocity
     }
 
     // called when DialogueManager has no further Dialogue, restarts time
     public void EndDialogue()
     {
         state = STATE_GAMEPLAY;
-        Time.timeScale = 1;
     }
 
     // displays victory or defeat condition
