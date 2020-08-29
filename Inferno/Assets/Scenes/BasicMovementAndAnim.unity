@@ -9574,10 +9574,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1092722994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a06be825e719af45b6a81819c8927a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 373f72cc3dd8deb41b5cddd43bbe0336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueGraph: {fileID: 11400000, guid: 8b7033855230e544ca71002504f41a0a, type: 2}
+  gameLogic: {fileID: 170938707}
+  player: {fileID: 1313631229}
 --- !u!61 &1094298098 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 4900484064034801575, guid: dbc08b09a4ee86146ba4df0995d8771c,
@@ -11396,6 +11398,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5203860727960113992}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1313631229 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5203860726923886410, guid: 19fa8dd626e617f45a96a3dd96824036,
+    type: 3}
+  m_PrefabInstance: {fileID: 5203860727960113992}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313631228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8bc48c201e777418249fac6052660c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &1313631230 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 5203860726923884726, guid: 19fa8dd626e617f45a96a3dd96824036,
@@ -21532,26 +21546,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 5203860726923884726, guid: 19fa8dd626e617f45a96a3dd96824036,
-        type: 3}
-      propertyPath: m_LinearDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5203860726923884726, guid: 19fa8dd626e617f45a96a3dd96824036,
-        type: 3}
-      propertyPath: m_Mass
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 5203860726923884726, guid: 19fa8dd626e617f45a96a3dd96824036,
-        type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5203860726923884727, guid: 19fa8dd626e617f45a96a3dd96824036,
         type: 3}
       propertyPath: gameLogic
       value: 
       objectReference: {fileID: 170938707}
+    - target: {fileID: 5203860726923886408, guid: 19fa8dd626e617f45a96a3dd96824036,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5203860726923886410, guid: 19fa8dd626e617f45a96a3dd96824036,
         type: 3}
       propertyPath: crosshair

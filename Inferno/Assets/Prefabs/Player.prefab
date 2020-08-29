@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5203860726923886408}
   - component: {fileID: 5203860726923884727}
   - component: {fileID: 5203860726923884726}
-  - component: {fileID: 5203860726923884725}
   - component: {fileID: 5203860726923886412}
   - component: {fileID: 5203860726923886413}
   m_Layer: 0
@@ -102,6 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8bc48c201e777418249fac6052660c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_vel: {x: 0, y: 0}
+  moveTimer: 0
   DASH_COOLDOWN: 5
   DIVE_SPEED: 6
   DIVE_TIME: 0.25
@@ -197,20 +198,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &5203860726923884725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5203860726923884724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f82938c555cae04d96aa834bd0e04ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 5203860726923884726}
-  m_velocity: {x: 0, y: 0}
 --- !u!114 &5203860726923886412
 MonoBehaviour:
   m_ObjectHideFlags: 0

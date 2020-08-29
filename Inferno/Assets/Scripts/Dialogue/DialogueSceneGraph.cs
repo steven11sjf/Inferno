@@ -2,13 +2,13 @@
 using UnityEngine;
 using XNode;
 
-public class DialogueSceneGraph : MonoBehaviour {
+public abstract class DialogueSceneGraph : MonoBehaviour {
 	[SerializeField]
 	public DialogueGraph dialogueGraph;
 
-    private GameLogic gameLogic;
+    public GameLogic gameLogic;
 
-    private void Start()
+    public void Start()
     {
         gameLogic = FindObjectOfType<GameLogic>();
     }
@@ -17,4 +17,6 @@ public class DialogueSceneGraph : MonoBehaviour {
     {
         gameLogic.StartDialogue(dialogueGraph);
     }
+
+    public abstract void DoCutsceneAction(string action, string[] args);
 }

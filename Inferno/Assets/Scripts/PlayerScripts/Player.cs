@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Magnitude", movement.magnitude);
 
-        rb.velocity += new Vector2(movement.x, movement.y);
+        rb.velocity = new Vector2(movement.x, movement.y);
         if (moveTimer > 0)
         {
             rb.velocity += m_vel;

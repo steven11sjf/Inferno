@@ -10,6 +10,8 @@ namespace Dialogue {
         [HideInInspector]
         public Chat current;
 
+        public DialogueSceneGraph sceneGraph;
+
         public void Restart() {
             //Find the first DialogueNode without any inputs. This is the starting node.
             current = nodes.Find(x => x is Chat && x.Inputs.All(y => !y.IsConnected)) as Chat;

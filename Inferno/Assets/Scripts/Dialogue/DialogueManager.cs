@@ -91,7 +91,7 @@ public class DialogueManager : MonoBehaviour
 
 
         // set name
-        nameText.text = "Person";
+        nameText.text = current.character.name;
 
         // open dialogue
         animator.SetBool("IsOpen", true);
