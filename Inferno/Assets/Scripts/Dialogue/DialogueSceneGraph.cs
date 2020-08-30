@@ -16,11 +16,19 @@ public abstract class DialogueSceneGraph : MonoBehaviour {
         gameLogic = FindObjectOfType<GameLogic>();
     }
 
+    /// <summary>
+    /// Starts the dialogue tree
+    /// </summary>
     public void StartDialogue()
     {
         gameLogic.StartDialogue(dialogueGraph);
     }
 
+    /// <summary>
+    /// Starts a cutscene action
+    /// </summary>
+    /// <param name="action">The name of the action</param>
+    /// <param name="args">The parameters for the action, if any</param>
     public abstract void DoCutsceneAction(string action, string[] args);
 
     /// <summary>

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains info on the melee weapon's name and attack pattern
+/// </summary>
 struct Melee
 {
     public Melee(string weaponName, float weaponDamage, float weaponLength, float startingAngle, float angleLength, float swingSpeed, float recoveryTime)
@@ -49,6 +52,9 @@ public class MeleeWeapons : MonoBehaviour
         nextSwing = Time.time + melees[equippedMelee].recovery;
     }
 
+    /// <summary>
+    /// Attempts to swing the weapon
+    /// </summary>
     public void Swing()
     {
         // validate that swing is available

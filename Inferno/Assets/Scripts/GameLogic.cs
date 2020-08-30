@@ -79,25 +79,37 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    // check if game is paused
+    /// <summary>
+    /// check if game is paused
+    /// </summary>
+    /// <returns>true if game is paused</returns>
     public bool IsPaused()
     {
         return paused;
     }
 
-    // true if it is in a state where player and enemies should behave normally
+    /// <summary>
+    /// check if normal gameplay should continue
+    /// </summary>
+    /// <returns>true if game is in an active state</returns>
     public bool DoGameplay()
     {
         if (state == STATE_GAMEPLAY) return true;
         else return false;
     }
 
+    /// <summary>
+    /// returns the state of the game
+    /// </summary>
+    /// <returns></returns>
     public int GetState()
     {
         return state;
     }
 
-    // handle player death
+    /// <summary>
+    /// Handles the player's death
+    /// </summary>
     public void PlayerDeath()
     {
         playerAlive = false;
@@ -106,6 +118,10 @@ public class GameLogic : MonoBehaviour
         // TODO: make menu for retry/menu/whatever
     }
 
+    /// <summary>
+    /// Pauses game and starts dialogue based on the DialogueGraph
+    /// </summary>
+    /// <param name="graph">The dialogue tree to use</param>
     public void StartDialogue(DialogueGraph graph)
     {
         dialogueManager.StartDialogue(graph);
@@ -114,14 +130,18 @@ public class GameLogic : MonoBehaviour
         player.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, 0.0f); // stop player's velocity
     }
 
-    // called when DialogueManager has no further Dialogue, restarts time
+    /// <summary>
+    /// Returns to a gameplay state and closes the dialogue bubble
+    /// </summary>
     public void EndDialogue()
     {
         state = STATE_GAMEPLAY;
         dialogueManager.EndDialogue();
     }
 
-    // displays victory or defeat condition
+    /// <summary>
+    /// Displays victory or defeat conditions
+    /// </summary>
     void OnGUI()
     {
         if (won)
