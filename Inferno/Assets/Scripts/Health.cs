@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     public float meleeDamage;
 
     // the current health
-    private float currHealth;
+    public float currHealth;
 
     // Start is called before the first frame update
     void Start()

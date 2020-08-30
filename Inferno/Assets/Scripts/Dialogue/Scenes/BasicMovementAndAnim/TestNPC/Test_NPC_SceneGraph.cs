@@ -30,9 +30,22 @@ public class Test_NPC_SceneGraph : DialogueSceneGraph
             case "EndDialogue":
                 base.gameLogic.EndDialogue();
                 break;
+            case "PlayerHeal":
+                float amount;
+                if (float.TryParse(args[0], out amount))
+                    player.GetComponent<Health>().Heal(amount);
+                else
+                    Debug.Log("PlayerHeal: args[0] not set!");
+                break;
             default:
                 Debug.Log("Invalid command " + action);
                 break;
         }
+    }
+
+    public override void UpdateVariables()
+    {
+        // PlayerHealthOver20
+        UpdateVariable("PlayerHealthOver20", player.GetComponent<Health>().GetHealth() > 20.0f);
     }
 }

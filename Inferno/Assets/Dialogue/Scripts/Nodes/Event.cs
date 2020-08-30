@@ -11,7 +11,7 @@ namespace Dialogue {
 
         public override void Trigger()
         {
-            ((DialogueGraph)graph).sceneGraph.DoCutsceneAction(actionName, args);
+            (graph as DialogueGraph).sceneGraph.DoCutsceneAction(actionName, args);
         }
     }
 }

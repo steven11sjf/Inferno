@@ -83,6 +83,7 @@ public class DialogueManager : MonoBehaviour
         if (dialogue == null) return;
 
         current = dialogue.current;
+        if (current == null) Debug.Log("null");
 
         // disable all buttons
         decisionChoice1.transform.parent.gameObject.SetActive(false);
@@ -91,7 +92,7 @@ public class DialogueManager : MonoBehaviour
 
 
         // set name
-        nameText.text = current.character.name;
+        nameText.text = current.character.m_name;
 
         // open dialogue
         animator.SetBool("IsOpen", true);
