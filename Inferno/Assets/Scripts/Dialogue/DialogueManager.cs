@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
 
     public Text nameText;
     public Text messageText;
+    public Image decisionBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Animator animator;
 
@@ -62,6 +63,10 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts a conversation using the dialogue tree given
+    /// </summary>
+    /// <param name="graph">The dialogue tree</param>
     public void StartDialogue(DialogueGraph graph)
     {
         inDialogue = true;
@@ -71,6 +76,10 @@ public class DialogueManager : MonoBehaviour
         ShowDialogue();
     }
 
+    /// <summary>
+    /// Selects an answer for the current node
+    /// </summary>
+    /// <param name="i"></param>
     public void SelectAnswer(int i)
     {
         Debug.Log("Answered " + i.ToString());
@@ -78,6 +87,9 @@ public class DialogueManager : MonoBehaviour
         ShowDialogue();
     }
 
+    /// <summary>
+    /// Prints current chat to dialogue box and activates buttons if required. 
+    /// </summary>
     private void ShowDialogue()
     {
         if (dialogue == null) return;
@@ -94,6 +106,9 @@ public class DialogueManager : MonoBehaviour
         // set name
         nameText.text = current.character.m_name;
 
+        // set color
+        decisionBox.color = current.character.color;
+
         // open dialogue
         animator.SetBool("IsOpen", true);
 
@@ -102,6 +117,9 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TypeMessage(current.text, typeSpeed));
     }
 
+    /// <summary>
+    /// Activates buttons if required
+    /// </summary>
     private void ShowAnswers()
     {
         // determine if message or decision
@@ -125,7 +143,12 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // displays the message
+    /// <summary>
+    /// Prints message using typewriter effect at rate of one letter per speed frames
+    /// </summary>
+    /// <param name="message">The text to put in the dialogue box's main text</param>
+    /// <param name="speed">how fast to print letters</param>
+    /// <returns></returns>
     IEnumerator TypeMessage(string message, int speed)
     {
         isTyping = true;
@@ -144,11 +167,15 @@ public class DialogueManager : MonoBehaviour
         isTyping = false;
     }
 
+    /// <summary>
+    /// Resets the DialogueManager's state and hides the dialogue box
+    /// </summary>
     public void EndDialogue()
     {
         inDialogue = false;
         current = null;
         dialogue = null;
         animator.SetBool("IsOpen", false);
+        decisionBox.color = Color.white;
     }
 }

@@ -21,21 +21,28 @@ public class Health : MonoBehaviour
         currHealth = maxHealth;
     }
 
-    // Returns the unit's melee damage
+    /// <summary>
+    /// Gets the unit's melee (collision) damage
+    /// </summary>
+    /// <returns></returns>
     public float GetMeleeDamage()
     {
         return meleeDamage;
     }
 
-    // Returns the unit's current health
+    /// <summary>
+    /// Gets the unit's current health
+    /// </summary>
+    /// <returns></returns>
     public float GetHealth()
     {
         return currHealth;
     }
 
-    ///<summary>
-    ///Decreases the object's health
-    ///</summary>
+    /// <summary>
+    /// Deals damage to the unit
+    /// </summary>
+    /// <param name="dmg">The amount of damage to deal</param>
     public void Damage(float dmg)
     {
         Debug.Log("Damaged " + dmg);
@@ -44,7 +51,10 @@ public class Health : MonoBehaviour
         if (currHealth < 0.0f) Die();
     }
 
-    // increases the object's health
+    /// <summary>
+    /// Raises the unit's health, capped at maxHealth
+    /// </summary>
+    /// <param name="health">how much health to give</param>
     public void Heal(float health)
     {
         if (health > 0) currHealth += health;
@@ -52,7 +62,9 @@ public class Health : MonoBehaviour
         if (currHealth > maxHealth) currHealth = maxHealth;
     }
 
-    // Kills the object
+    /// <summary>
+    /// Kills the object
+    /// </summary>
     void Die()
     {
         if (gameObject.CompareTag("Player"))

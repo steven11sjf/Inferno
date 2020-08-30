@@ -137,7 +137,10 @@ public class Charger : MonoBehaviour
         }
     }
 
-    // check if it has LOS to player
+    /// <summary>
+    /// Check if the Charger can see the player
+    /// </summary>
+    /// <returns>true if a linecast detects the player without colliding with walls</returns>
     bool CanSeePlayer()
     {
         RaycastHit2D[] hits = Physics2D.LinecastAll(transform.position, player.transform.position);
@@ -152,7 +155,10 @@ public class Charger : MonoBehaviour
         return false;
     }
 
-    // handle collisions with walls and player
+    /// <summary>
+    /// Handle collisions with walls and player
+    /// </summary>
+    /// <param name="col">the detected collision</param>
     void OnCollisionEnter2D(Collision2D col)
     {
         // get the other object

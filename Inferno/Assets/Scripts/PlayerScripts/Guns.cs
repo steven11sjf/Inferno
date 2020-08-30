@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * struct that includes info on a gun's damage, spread, fire rate
- */
+/// <summary>
+/// Struct that includes info on a gun's firing pattern
+/// </summary>
 struct Gun
 {
     public Gun(string weaponName, float dmg, float rate, float spr, float spd, int projPerShot)
@@ -38,9 +38,9 @@ public class Guns : MonoBehaviour
     private float nextShot; // time gun is next ready to fire
     public int numGuns = 3;
 
-    /*
-     * Fires the gun, if able to
-     */
+    /// <summary>
+    /// Fires the gun, if possible
+    /// </summary>
     public void Shoot()
     {
         if (Time.time < nextShot) return;
@@ -84,11 +84,11 @@ public class Guns : MonoBehaviour
         ChangeGun(0); // auto-equip pistol
     }
 
-    /*
-     * changes the gun to the given gun
-     * returns 0 on success
-     *         1 if out of range
-     */
+    /// <summary>
+    /// Changes the gun to a valid weapon
+    /// </summary>
+    /// <param name="gun">the id of the gun</param>
+    /// <returns>0 on success</returns>
     public int ChangeGun(int gun)
     {
         // validate input

@@ -43,6 +43,10 @@ public class Sword : MonoBehaviour
         if (ttl < 0.0f) Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Handles collision with walls and enemies
+    /// </summary>
+    /// <param name="hit">the Collider2D for the object hit</param>
     private void OnTriggerEnter2D(Collider2D hit)
     {
         GameObject other = hit.gameObject;

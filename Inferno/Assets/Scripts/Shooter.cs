@@ -144,7 +144,10 @@ public class Shooter : MonoBehaviour
         animator.SetFloat("XAxis", rb.velocity.x);
     }
 
-    // check if it has LOS to player
+    /// <summary>
+    /// Checks if the shooter can see the player
+    /// </summary>
+    /// <returns>True if a raycast detects a player before any walls</returns>
     bool CanSeePlayer()
     {
         RaycastHit2D[] hits = Physics2D.LinecastAll(transform.position, player.transform.position);
@@ -159,7 +162,9 @@ public class Shooter : MonoBehaviour
         return false;
     }
 
-    // shoot at player
+    /// <summary>
+    /// Attempts to shoot at the player
+    /// </summary>
     void Shoot()
     {
         if(Time.time > nextShot)
@@ -189,6 +194,10 @@ public class Shooter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles a collision with the player
+    /// </summary>
+    /// <param name="col">The collision2D with the player</param>
     void OnCollisionEnter2D(Collision2D col)
     {
         GameObject other = col.gameObject;
