@@ -11,17 +11,24 @@ namespace Dialogue {
     [NodeTint("#CCCCFF")]
     public class Branch : DialogueBaseNode {
 
-        public Condition[] conditions;
+        public string[] conditions;
         [Output] public DialogueBaseNode pass;
         [Output] public DialogueBaseNode fail;
 
         private bool success;
 
         public override void Trigger() {
+            DialogueSceneGraph scene = (graph as DialogueGraph).sceneGraph;
+
+            // update conditions
+            scene.UpdateVariables();
+
             // Perform condition
             bool success = true;
+            bool result;
             for (int i = 0; i < conditions.Length; i++) {
-                if (!conditions[i].Invoke()) {
+                // if the variable doesn't exist, or the value is false
+                if (!scene.CheckVariable(conditions[i], out result) || !result) {
                     success = false;
                     break;
                 }
@@ -38,7 +45,4 @@ namespace Dialogue {
             }
         }
     }
-
-    [Serializable]
-    public class Condition : SerializableCallback<bool> { }
 }

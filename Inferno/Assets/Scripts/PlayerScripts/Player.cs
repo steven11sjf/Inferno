@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MoveCrosshair();
         // skip update if game is in cutscene or dialog
         if (!gameLogic.DoGameplay()) return;
 
@@ -57,7 +58,6 @@ public class Player : MonoBehaviour
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
         movement.Normalize();
 
-        MoveCrosshair();
         if (Dash(movement) != 0) return;
 
         // shoot if this is the first frame M1 was pressed
