@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Daniel : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public Vector2 m_vel;
+    public int moveTimer;
+
     public float DASH_COOLDOWN = 5.0f;
     public float DIVE_SPEED = 4.0f;
     public float DIVE_TIME;
@@ -41,6 +44,7 @@ public class Daniel : MonoBehaviour
         gameLogic = FindObjectOfType<GameLogic>();
         dashing = 0;
         dashCooldownTime = 0.0f;
+        m_vel = Vector2.zero;
     }
 
     // Update is called once per frame
@@ -79,6 +83,11 @@ public class Daniel : MonoBehaviour
         animator.SetFloat("Magnitude", movement.magnitude);
 
         rb.velocity = new Vector2(movement.x, movement.y);
+        if (moveTimer > 0)
+        {
+            rb.velocity += m_vel;
+            --moveTimer;
+        }
 
     }
 
@@ -191,11 +200,17 @@ public class Daniel : MonoBehaviour
             if(other.CompareTag("NPCs"))
             {
                 // trigger dialogue and return
-                other.GetComponent<Conversation>().StartConversation();
+                other.GetComponent<DialogueSceneGraph>().StartDialogue();
                 return;
             }
         }
         
+    }
+
+    public void Move(Vector2 vec)
+    {
+        m_vel = vec;
+        moveTimer = 30;
     }
 
     void OnGUI()

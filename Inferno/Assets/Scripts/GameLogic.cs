@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Dialogue;
 using UnityEngine;
 
 public class GameLogic : MonoBehaviour
@@ -8,7 +9,7 @@ public class GameLogic : MonoBehaviour
     public GameObject player; // the player
     public Camera cam; // the camera
     public GameObject victoryCondition; // the enemy that needs to be dead for the victory condition
-    public ConversationManager conversationManager; // the conversation manager
+    public DialogueManager dialogueManager; // the conversation manager
 
     private Health playerHealth; // the Health script for the player
     private Health enemyHealth; // the Health script for the enemy, set in Start()
@@ -25,7 +26,7 @@ public class GameLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        conversationManager = FindObjectOfType<ConversationManager>();
+        dialogueManager = FindObjectOfType<DialogueManager>();
 
         enemyHealth = victoryCondition.GetComponent<Health>();
         paused = false;
@@ -66,7 +67,7 @@ public class GameLogic : MonoBehaviour
             // if we are in a gameplay state, attempt to interact
             if (state == STATE_GAMEPLAY)
             {
-                player.GetComponent<Daniel>().Interact();
+                player.GetComponent<Player>().Interact();
             }
         }
 
@@ -105,18 +106,19 @@ public class GameLogic : MonoBehaviour
         // TODO: make menu for retry/menu/whatever
     }
 
-    public void StartConversation(Conversation conv, ConversationNode node)
+    public void StartDialogue(DialogueGraph graph)
     {
-        conversationManager.Converse(conv, node);
+        dialogueManager.StartDialogue(graph);
+        
         state = STATE_DIALOGUE;
         player.GetComponent<Rigidbody2D>().velocity = new Vector2(0.0f, 0.0f); // stop player's velocity
     }
 
     // called when DialogueManager has no further Dialogue, restarts time
-    public void EndConversation()
+    public void EndDialogue()
     {
         state = STATE_GAMEPLAY;
-        conversationManager.animator.SetBool("IsOpen", false);
+        dialogueManager.EndDialogue();
     }
 
     // displays victory or defeat condition

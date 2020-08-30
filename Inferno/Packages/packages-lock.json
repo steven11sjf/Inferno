@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.github.siccity.serializablecallback": {
+      "version": "git+https://github.com/Siccity/SerializableCallback.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "63a8c1e919752300252f27ea69762bb35088802d"
+    },
+    "com.github.siccity.xnode": {
+      "version": "https://github.com/siccity/xNode.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1fb94b24133284c3878ab7c91a64fea8e01e6838"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

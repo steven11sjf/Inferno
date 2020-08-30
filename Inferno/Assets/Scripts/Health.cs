@@ -33,7 +33,9 @@ public class Health : MonoBehaviour
         return currHealth;
     }
 
-    // Decreases the object's health
+    ///<summary>
+    ///Decreases the object's health
+    ///</summary>
     public void Damage(float dmg)
     {
         Debug.Log("Damaged " + dmg);
