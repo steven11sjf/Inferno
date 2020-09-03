@@ -47,7 +47,11 @@ public class Shooter : MonoBehaviour
     void Update()
     {
         // skip update if game is in cutscene or dialog
-        if (!gameLogic.DoGameplay()) return;
+        if (!gameLogic.DoGameplay())
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
 
         if (aggression == 2) // is aggroed
         {
