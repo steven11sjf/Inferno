@@ -36,7 +36,11 @@ public class Charger : MonoBehaviour
     void Update()
     {
         // skip update if game is in cutscene or dialog
-        if (!gameLogic.DoGameplay()) return;
+        if (!gameLogic.DoGameplay())
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
 
         if (charging == 0 && CanSeePlayer()) // not charging
         {
