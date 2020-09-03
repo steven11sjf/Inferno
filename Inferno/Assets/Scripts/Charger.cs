@@ -42,6 +42,12 @@ public class Charger : MonoBehaviour
             return;
         }
 
+        // update charge timer
+        if(charging != 0)
+        {
+            chargeTimer -= Time.deltaTime;
+        }
+
         if (charging == 0 && CanSeePlayer()) // not charging
         {
             if (CanSeePlayer())
@@ -53,7 +59,7 @@ public class Charger : MonoBehaviour
                 // start windup and set charge time
                 charging = 1;
                 animator.SetInteger("ChargerState", 1);
-                chargeTimer = Time.time + CHARGE_WINDUP;
+                chargeTimer = CHARGE_WINDUP;
                 return;
             }
         }
@@ -67,19 +73,19 @@ public class Charger : MonoBehaviour
             }
 
             // check timer
-            if(Time.time > chargeTimer)
+            if(chargeTimer <= 0.0f)
             {
 
                 // start the charge and set the timer
                 charging = 2;
                 animator.SetInteger("ChargerState", 2);
-                chargeTimer = Time.time + CHARGE_TIME;
+                chargeTimer = CHARGE_TIME;
             }
         }
         else if(charging == 2) // charging
         {
             // check timer
-            if(Time.time > chargeTimer)
+            if(chargeTimer <= 0.0f)
             {
                 // end the charge
                 charging = 0;
@@ -95,7 +101,7 @@ public class Charger : MonoBehaviour
             {
                 charging = 3; // overcharge
                 animator.SetInteger("ChargerState", 3);
-                chargeTimer = Time.time + CHARGE_OVERCHARGE_TIME;
+                chargeTimer = CHARGE_OVERCHARGE_TIME;
                 //transform.position = transform.position + chargeDir * Time.deltaTime * CHARGE_SPEED;
                 rb.velocity = new Vector2(chargeDir.x, chargeDir.y) * CHARGE_SPEED;
             }
@@ -121,11 +127,11 @@ public class Charger : MonoBehaviour
         }
         else if(charging == 3) // overcharge
         {
-            if(chargeTimer < Time.time)
+            if(chargeTimer <= 0.0f)
             {
                 charging = 4;
                 animator.SetInteger("ChargerState", 4);
-                chargeTimer = Time.time;
+                chargeTimer = CHARGE_STUN;
             }
 
             rb.velocity = new Vector2(chargeDir.x, chargeDir.y) * CHARGE_SPEED;
@@ -133,7 +139,7 @@ public class Charger : MonoBehaviour
         }
         else if(charging == 4) // stun
         {
-            if(chargeTimer < Time.time)
+            if(chargeTimer <= 0.0f)
             {
                 charging = 0;
                 animator.SetInteger("ChargerState", 0);
