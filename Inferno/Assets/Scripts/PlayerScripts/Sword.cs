@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
+    private GameLogic gameLogic;
+
     public Rigidbody2D rb;
     public GameObject player;
 
@@ -14,23 +16,37 @@ public class Sword : MonoBehaviour
 
     private float lengthRemaining;
     public float initAngle;
+    private float ttl;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
         //Debug.Log(initAngle);
         //rb.rotation = initAngle;
         lengthRemaining = swingLength;
         transform.position = player.transform.position;
+
+        ttl = 0.166f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay()) return;
+
         rb.rotation += Time.deltaTime * speed;
         transform.position = player.transform.position;
+
+        ttl -= Time.deltaTime;
+        if (ttl < 0.0f) Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Handles collision with walls and enemies
+    /// </summary>
+    /// <param name="hit">the Collider2D for the object hit</param>
     private void OnTriggerEnter2D(Collider2D hit)
     {
         GameObject other = hit.gameObject;

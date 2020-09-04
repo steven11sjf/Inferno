@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Daniel : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public Vector2 m_vel;
+    public int moveTimer;
+
     public float DASH_COOLDOWN = 5.0f;
     public float DIVE_SPEED = 4.0f;
     public float DIVE_TIME;
     public float ROLL_SPEED = 2.0f;
     public float ROLL_TIME;
+
+    private GameLogic gameLogic;
 
     // used to change animator state
     public Animator animator;
@@ -36,19 +41,23 @@ public class Daniel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
         dashing = 0;
         dashCooldownTime = 0.0f;
+        m_vel = Vector2.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        MoveCrosshair();
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay()) return;
+
         // get & set horizontal and vertical movement
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
         movement.Normalize();
 
-        MoveCrosshair();
         if (Dash(movement) != 0) return;
 
         // shoot if this is the first frame M1 was pressed
@@ -62,12 +71,23 @@ public class Daniel : MonoBehaviour
         {
             melees.Swing();
         }
+
+        // hot-swap gun if a number was pressed
+        if (Input.GetKeyDown("1")) guns.ChangeGun(0);
+        else if (Input.GetKeyDown("2")) guns.ChangeGun(1);
+        else if (Input.GetKeyDown("3")) guns.ChangeGun(2);
+
         // set animator variables
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Magnitude", movement.magnitude);
 
         rb.velocity = new Vector2(movement.x, movement.y);
+        if (moveTimer > 0)
+        {
+            rb.velocity += m_vel;
+            --moveTimer;
+        }
 
     }
 
@@ -159,6 +179,38 @@ public class Daniel : MonoBehaviour
         }
 
         // TODO healthpacks and walls interactions
+    }
+
+    public void Interact()
+    {
+        // get a normalized vector pointing from Daniel to the crosshair
+        Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
+        danielToCrosshair.Normalize();
+
+        // get current position and endpoint of detection raycast
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        Vector2 raycastEnd = currentPosition + new Vector2(danielToCrosshair.x, danielToCrosshair.y) * 0.5f;
+
+        // raycast the line and store in hits[]
+        RaycastHit2D[] hits = Physics2D.LinecastAll(currentPosition, raycastEnd);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            GameObject other = hit.collider.gameObject;
+            if(other.CompareTag("NPCs"))
+            {
+                // trigger dialogue and return
+                other.GetComponent<DialogueSceneGraph>().StartDialogue();
+                return;
+            }
+        }
+        
+    }
+
+    public void Move(Vector2 vec)
+    {
+        m_vel = vec;
+        moveTimer = 30;
     }
 
     void OnGUI()

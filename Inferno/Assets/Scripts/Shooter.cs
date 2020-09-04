@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
+    private GameLogic gameLogic;
 
     public GameObject player;
     public Rigidbody2D rb;
@@ -33,6 +34,8 @@ public class Shooter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
+
         aggression = 0;
         nextShot = 0.0f;
         lastLOS = 0.0f;
@@ -43,7 +46,14 @@ public class Shooter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(aggression == 2) // is aggroed
+        // skip update if game is in cutscene or dialog
+        if (!gameLogic.DoGameplay())
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
+        if (aggression == 2) // is aggroed
         {
             if (CanSeePlayer())
             {
@@ -138,7 +148,10 @@ public class Shooter : MonoBehaviour
         animator.SetFloat("XAxis", rb.velocity.x);
     }
 
-    // check if it has LOS to player
+    /// <summary>
+    /// Checks if the shooter can see the player
+    /// </summary>
+    /// <returns>True if a raycast detects a player before any walls</returns>
     bool CanSeePlayer()
     {
         RaycastHit2D[] hits = Physics2D.LinecastAll(transform.position, player.transform.position);
@@ -153,7 +166,9 @@ public class Shooter : MonoBehaviour
         return false;
     }
 
-    // shoot at player
+    /// <summary>
+    /// Attempts to shoot at the player
+    /// </summary>
     void Shoot()
     {
         if(Time.time > nextShot)
@@ -174,9 +189,6 @@ public class Shooter : MonoBehaviour
             bulletScript.instantiator = gameObject;
             bulletScript.damage = 7.5f;
 
-            // destroy bullet 3 seconds after firing
-            Destroy(bullet, 3.0f);
-
             // set delay for next shot
             nextShot = Time.time + SHOOTING_DELAY;
         }
@@ -186,6 +198,10 @@ public class Shooter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles a collision with the player
+    /// </summary>
+    /// <param name="col">The collision2D with the player</param>
     void OnCollisionEnter2D(Collision2D col)
     {
         GameObject other = col.gameObject;
