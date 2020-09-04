@@ -32,6 +32,7 @@ public class Guns : MonoBehaviour
     public GameObject crosshair;
     public GameObject bulletPrefab;
 
+    private GameLogic gameLogic;
     private Gun[] guns;
 
     public int selectedGun; // id of the selected gun
@@ -43,7 +44,7 @@ public class Guns : MonoBehaviour
     /// </summary>
     public void Shoot()
     {
-        if (Time.time < nextShot) return;
+        if (nextShot > 0.0f) return;
 
         // get a normalized vector pointing from Daniel to the crosshair
         Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
@@ -70,12 +71,14 @@ public class Guns : MonoBehaviour
         }
 
         // set time until next shot
-        nextShot = Time.time + guns[selectedGun].fireRate;
+        nextShot = guns[selectedGun].fireRate;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogic>();
+
         guns = new Gun[numGuns];
         guns[0] = new global::Gun("Pistol", 15.0f, 1.0f, 0.0f, 6.0f, 1);
         guns[1] = new global::Gun("Shotgun", 3.0f, 2.0f, 10.0f, 10.0f, 20);
@@ -97,9 +100,17 @@ public class Guns : MonoBehaviour
 
         selectedGun = gun;
 
-        nextShot = Time.time + guns[selectedGun].fireRate + GUN_SWAP_TIME;
+        nextShot = GUN_SWAP_TIME;
         return 0;
     }
 
-
+    private void Update()
+    {
+        // check if gameplay is active
+        if(gameLogic.DoGameplay())
+        {
+            nextShot -= Time.deltaTime;
+            return;
+        }
+    }
 }
