@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Dialogue;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameLogic : MonoBehaviour
 {
@@ -43,6 +44,7 @@ public class GameLogic : MonoBehaviour
         {
             cam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         }
+
         // check if pause is pressed
         if(Input.GetKeyDown("escape") && playerAlive && !won && state == STATE_GAMEPLAY)
         {
@@ -50,10 +52,12 @@ public class GameLogic : MonoBehaviour
 
             if (paused)
             {
+                PauseAllAnimators();
                 Time.timeScale = 0;
             }
             else
             {
+                UnpauseAllAnimators();
                 Time.timeScale = 1;
             }
         }
@@ -124,6 +128,8 @@ public class GameLogic : MonoBehaviour
     /// <param name="graph">The dialogue tree to use</param>
     public void StartDialogue(DialogueGraph graph)
     {
+        PauseAllAnimators();
+
         dialogueManager.StartDialogue(graph);
         
         state = STATE_DIALOGUE;
@@ -135,6 +141,8 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     public void EndDialogue()
     {
+        UnpauseAllAnimators();
+
         state = STATE_GAMEPLAY;
         dialogueManager.EndDialogue();
     }
@@ -154,6 +162,42 @@ public class GameLogic : MonoBehaviour
         {
             string str = "Dead!";
             GUI.Label(new Rect(500, 500, 650, 20), str);
+        }
+    }
+
+    /// <summary>
+    /// Pauses all animators in the scene
+    /// </summary>
+    private void PauseAllAnimators()
+    {
+        // disable player's animator
+        player.GetComponent<Animator>().enabled = false;
+
+        // disable enemies animators
+        GameObject enemies = GameObject.FindGameObjectWithTag("EnemyContainer");
+        Animator[] enemyAnimators = enemies.GetComponentsInChildren<Animator>();
+
+        foreach (Animator a in enemyAnimators)
+        {
+            a.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Unpauses all animators in the scene
+    /// </summary>
+    private void UnpauseAllAnimators()
+    {
+        // enable player's animator
+        player.GetComponent<Animator>().enabled = true;
+
+        // enable enemies animators
+        GameObject enemies = GameObject.FindGameObjectWithTag("EnemyContainer");
+        Animator[] enemyAnimators = enemies.GetComponentsInChildren<Animator>();
+
+        foreach (Animator a in enemyAnimators)
+        {
+            a.enabled = true;
         }
     }
 }
