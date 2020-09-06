@@ -7,26 +7,38 @@ using Dialogue;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.CodeDom;
+using TMPro;
+using TMPro.Examples;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 public class DialogueManager : MonoBehaviour
 {
-    private static int TYPE_SPEED_MEDIUM = 3;
+    private static float TYPE_SPEED_MEDIUM = 0.05f;
+    private static float END_OF_SENTENCE_DELAY = 0.15f;
+
+    public DialogueAnimator dialogueAnimator;
 
     public Text nameText;
     public Text messageText;
+    public TMP_Text m_MessageText;
+    public VertexJitter m_VertexJitter;
     public Image decisionBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Animator animator;
 
-    public int typeSpeed;
+    public float typeSpeed;
 
     private bool inDialogue;
     private bool isTyping;
+
+    private bool isTextJittering;
 
     public List<string> currentRichTextTags;
     public string currentString;
     public string tempString;
     public bool isParsingTag;
+    private int currentCharIndex;
 
     public DialogueGraph dialogue;
     public Chat current;
@@ -63,7 +75,7 @@ public class DialogueManager : MonoBehaviour
                     tempString = "";
                     isParsingTag = false;
 
-                    messageText.text = ParseMessage(dialogue.current.text);
+                    m_MessageText.text = ParseMessage(dialogue.current.text);
                     ShowAnswers(); // show answers, if any
                 }
                 else
@@ -111,13 +123,15 @@ public class DialogueManager : MonoBehaviour
         if (dialogue == null) return;
 
         current = dialogue.current;
-        if (current == null) Debug.Log("null");
+        if (current == null) Debug.Log("DialogueManager: null");
 
         // disable all buttons
         decisionChoice1.transform.parent.gameObject.SetActive(false);
         decisionChoice2.transform.parent.gameObject.SetActive(false);
         decisionChoice3.transform.parent.gameObject.SetActive(false);
 
+        // reset DialogueAnimator jittering
+        dialogueAnimator.Reset();
 
         // set name
         nameText.text = current.character.m_name;
@@ -167,8 +181,12 @@ public class DialogueManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator TypeMessage(string message)
     {
+        m_VertexJitter.ResetJitter();
+
+        currentCharIndex = 0;
+        isTextJittering = false;
         isTyping = true;
-        messageText.text = "";
+        m_MessageText.text = "";
         currentString = "";
 
         foreach (char letter in message.ToCharArray())
@@ -199,10 +217,11 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < typeSpeed; ++i)
-                    yield return null;
+                yield return new WaitForSeconds(typeSpeed);
 
                 currentString += letter;
+                if (isTextJittering) m_VertexJitter.AddJitterToCharacter(currentCharIndex);
+                ++currentCharIndex;
             }
 
             // print current string to text box
@@ -211,8 +230,13 @@ public class DialogueManager : MonoBehaviour
             {
                 temp += s;
             }
-            messageText.text = temp;
+            m_MessageText.text = temp;
 
+            // add delay if end of a sentence
+            if (letter == '.' || letter == '?' || letter == '!')
+            {
+                yield return new WaitForSeconds(END_OF_SENTENCE_DELAY);
+            }
         }
 
         ShowAnswers();
@@ -224,8 +248,10 @@ public class DialogueManager : MonoBehaviour
     {
         string result = "";
         
-        messageText.text = "";
+        m_MessageText.text = "";
         currentString = "";
+        currentCharIndex = 0;
+        isTextJittering = false;
 
         foreach (char letter in message.ToCharArray())
         {
@@ -250,6 +276,8 @@ public class DialogueManager : MonoBehaviour
             else
             {
                 currentString += letter;
+                if (isTextJittering) m_VertexJitter.AddJitterToCharacter(currentCharIndex);
+                ++currentCharIndex;
             }
         }
         result = currentString;
@@ -298,11 +326,17 @@ public class DialogueManager : MonoBehaviour
 
             // change speed
             case 's':
-                int newSpeed;
+                float newSpeed;
                 toParse = tag.Substring(7, tag.Length - 8);
 
-                int.TryParse(toParse, out newSpeed);
+                float.TryParse(toParse, out newSpeed);
                 typeSpeed = newSpeed;
+                break;
+
+            // enable text jitter
+            case 'j':
+                Debug.Log("Jittering!");
+                isTextJittering = true;
                 break;
 
             // closing tag
@@ -353,6 +387,11 @@ public class DialogueManager : MonoBehaviour
                         typeSpeed = TYPE_SPEED_MEDIUM;
                         break;
 
+                    // remove jittering
+                    case 'j':
+                        isTextJittering = false;
+                        break;
+
                     // unknown
                     default:
 
@@ -377,6 +416,5 @@ public class DialogueManager : MonoBehaviour
         current = null;
         dialogue = null;
         animator.SetBool("IsOpen", false);
-        decisionBox.color = Color.white;
     }
 }
