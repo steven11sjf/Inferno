@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 984, y: 40}
+  position: {x: 792, y: 40}
   ports:
     keys:
     - input
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 904, y: 216}
+  position: {x: 792, y: 248}
   ports:
     keys:
     - input
@@ -245,7 +245,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 0
-  text: How is your day going?
+  text: How is your day...<pause=1.0> going?
   answers:
   - text: Awesome!
     voiceClip: {fileID: 0}
@@ -497,7 +497,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 1
-  text: PogChamp!
+  text: <color=yellow>PogChamp!</color>
   answers: []
 --- !u!114 &8309115395292917336
 MonoBehaviour:
@@ -557,5 +557,5 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 0
-  text: Oh, you're fine!
+  text: Oh, <speed=40><b><i>you're</i> fine!</b></speed>
   answers: []
