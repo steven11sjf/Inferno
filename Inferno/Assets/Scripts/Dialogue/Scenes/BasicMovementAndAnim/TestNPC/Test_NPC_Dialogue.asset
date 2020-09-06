@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 984, y: 40}
+  position: {x: 792, y: 40}
   ports:
     keys:
     - input
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 904, y: 216}
+  position: {x: 792, y: 248}
   ports:
     keys:
     - input
@@ -273,7 +273,7 @@ MonoBehaviour:
   - {fileID: -2375296982763254534}
   - {fileID: 8309115395292917336}
   - {fileID: 3406803262475549159}
-  current: {fileID: 8309115395292917336}
+  current: {fileID: 6402205834937311888}
   sceneGraph: {fileID: 0}
 --- !u!114 &3406803262475549159
 MonoBehaviour:
@@ -497,7 +497,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 1
-  text: PogChamp!
+  text: <color=yellow>PogChamp!</color>
   answers: []
 --- !u!114 &8309115395292917336
 MonoBehaviour:
@@ -557,5 +557,5 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 0
-  text: Oh, you're fine!
+  text: Oh, <b><i>you're</i><p=1.0> fine!</b>
   answers: []
