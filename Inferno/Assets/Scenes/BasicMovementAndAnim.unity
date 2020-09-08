@@ -14075,6 +14075,7 @@ GameObject:
   - component: {fileID: 1526442315}
   - component: {fileID: 1526442317}
   - component: {fileID: 1526442318}
+  - component: {fileID: 1526442319}
   m_Layer: 5
   m_Name: Dialogue (TMP)
   m_TagString: Untagged
@@ -14251,8 +14252,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MAX_TEXT_CHARACTERS: 1024
   AngleMultiplier: 1
-  SpeedMultiplier: 1
+  SpeedMultiplier: 20
   CurveScale: 5
+--- !u!114 &1526442319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526442313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5facaeabe1802504fa594b8a4b9ed928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1528829169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8443129423108269434, guid: 9bb87fbc23c762f4aa0d39613e8522b7,
@@ -21384,7 +21397,7 @@ PrefabInstance:
     - target: {fileID: 93174871658953480, guid: 90a387cda1f9e1f4eb1f754862ce872b,
         type: 3}
       propertyPath: typeSpeed
-      value: 3
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 93174871658953480, guid: 90a387cda1f9e1f4eb1f754862ce872b,
         type: 3}
@@ -21411,6 +21424,11 @@ PrefabInstance:
       propertyPath: m_VertexJitter
       value: 
       objectReference: {fileID: 1526442318}
+    - target: {fileID: 93174871658953480, guid: 90a387cda1f9e1f4eb1f754862ce872b,
+        type: 3}
+      propertyPath: m_VertexColor
+      value: 
+      objectReference: {fileID: 1526442319}
     - target: {fileID: 93174871658953481, guid: 90a387cda1f9e1f4eb1f754862ce872b,
         type: 3}
       propertyPath: m_LocalPosition.x

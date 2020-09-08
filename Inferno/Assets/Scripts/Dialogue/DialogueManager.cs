@@ -27,6 +27,9 @@ public class DialogueManager : MonoBehaviour
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Animator animator;
 
+    public string X_message;
+    public string X_typewriter;
+
     public float typeSpeed;
 
     private bool inDialogue;
@@ -144,9 +147,247 @@ public class DialogueManager : MonoBehaviour
 
         // start coroutine to type
         StopAllCoroutines();
-        StartCoroutine(TypeMessage(current.text));
+        StartCoroutine(TMP_TypeMessage(current.text));
     }
 
+    IEnumerator TMP_TypeMessage(string message)
+    {
+        isTyping = true;
+        m_VertexJitter.ResetJitter();
+
+        string messageText = StripTypewriterCommands(message);
+        string typewriterText = ToTypewriterCommands(message);
+
+        X_message = messageText;
+        X_typewriter = typewriterText;
+
+        m_MessageText.text = messageText;
+        // TODO SetTextClear();
+
+        bool parsing = false;
+        string tag = "";
+        string substring;
+        int cur = 0;
+        foreach (char c in typewriterText.ToCharArray())
+        {
+            if (parsing)
+            {
+                if (c == '>')
+                {
+                    tag += ">";
+
+                    if (tag[1] == 'p')
+                    {
+                        float pauseLength;
+                        substring = tag.Substring(7, tag.Length - 8);
+
+                        float.TryParse(substring, out pauseLength);
+                        yield return new WaitForSeconds(pauseLength);
+                    }
+                    else if (tag[1] == 's')
+                    {
+                        float newSpeed;
+                        substring = tag.Substring(7, tag.Length - 8);
+
+                        float.TryParse(substring, out newSpeed);
+                        typeSpeed = newSpeed;
+                    }
+                    else if (tag[1] == '/' && tag[2] == 's')
+                    {
+                        typeSpeed = TYPE_SPEED_MEDIUM;
+                    }
+
+                    parsing = false;
+                }
+                else
+                {
+                    tag += c;
+                }
+            }
+            else if (c == '<')
+            {
+                parsing = true;
+                tag = "<";
+            }
+            else
+            {
+                // TODO ShowNextChar()
+                ++cur;
+                yield return new WaitForSeconds(typeSpeed);
+
+                if (c == '.' || c == '!' || c == '?')
+                {
+                    yield return new WaitForSeconds(typeSpeed * 2.5f);
+                }
+            }
+        }
+        Debug.Log("Finished typeing");
+
+        ShowAnswers();
+        isTyping = false;
+    }
+
+    private string ToTypewriterCommands(string message)
+    {
+        string result = "";
+
+        string tag = "";
+        bool parsing = false;
+        foreach (char letter in message.ToCharArray())
+        {
+            if (parsing)
+            {
+                if (letter == '>')
+                {
+                    tag += letter;
+                    if (InterpretTag(tag)) result += tag;
+                    parsing = false;
+                }
+                else
+                {
+                    tag += letter;
+                }
+            }
+            else if (letter == '<')
+            {
+                parsing = true;
+                tag = "<";
+            }
+            else
+            {
+                result += letter;
+            }
+        }
+
+        return result;
+    }
+
+    private string StripTypewriterCommands(string message)
+    {
+        string result = "";
+
+        string tag = "";
+        bool parsing = false;
+        bool isJittering = false;
+        int curr = 0;
+        foreach (char letter in message.ToCharArray())
+        {
+            if (parsing)
+            {
+                if (letter == '>')
+                {
+                    tag += letter;
+                    bool res = InterpretTag(tag);
+                    if(!res)
+                    {
+                        if (tag[1] == 'j')
+                        {
+                            isJittering = true;
+                        }
+                        else if (tag[1] == '/' && tag[2] == 'j')
+                        {
+                            isJittering = false;
+                        }
+                    }
+                    parsing = false;
+                }
+                else
+                {
+                    tag += letter;
+                }
+            }
+            else if (letter == '<')
+            {
+                parsing = true;
+                tag = "<";
+            }
+            else
+            {
+                result += letter;
+                if (isJittering)
+                {
+                    m_VertexJitter.AddJitterToCharacter(curr);
+                }
+                ++curr;
+            }
+        }
+
+        return result;
+    }
+    
+    /// <summary>
+    /// Interprets a tag and returns true if it is a typewriter command, false if not
+    /// </summary>
+    /// <param name="tag">the tag being parsed</param>
+    /// <returns>true if tag is a pause tag or a speed tag</returns>
+    private bool InterpretTag(string tag)
+    {
+        bool result = false;
+        char[] tagArray = tag.ToCharArray();
+
+        switch (tagArray[1])
+        {
+            case 'b':
+                result = false;
+                break;
+
+            case 'i':
+                result = false;
+                break;
+
+            case 'c':
+                result = false;
+                break;
+
+            case 's':
+                if (tagArray[2] == 'i') result = false;
+                else result = true;
+                break;
+
+            case 'j':
+                result = false;
+                break;
+
+            case 'p':
+                result = true;
+                break;
+
+            case '/':
+                switch (tagArray[2])
+                {
+                    case 'b':
+                        result = false;
+                        break;
+
+                    case 'i':
+                        result = false;
+                        break;
+
+                    case 'c':
+                        result = false;
+                        break;
+
+                    case 's':
+                        if (tagArray[3] == 'i') result = false;
+                        else result = true;
+                        break;
+
+                    case 'j':
+                        result = false;
+                        break;
+                    default:
+                        Debug.Log("DialogueManager: Tag not found " + tag);
+                        break;
+                }
+                break;
+
+            default:
+                Debug.Log("DialogueManager: Tag not found " + tag);
+                break;
+        }
+
+        return result;
+    }
     /// <summary>
     /// Activates buttons if required
     /// </summary>

@@ -16,7 +16,7 @@ namespace TMPro.Examples
         private TMP_Text m_TextComponent;
         private bool hasTextChanged;
 
-        private bool[] m_IsAnimated;
+        public bool[] m_IsAnimated;
 
         /// <summary>
         /// Structure to hold pre-computed animation data.
