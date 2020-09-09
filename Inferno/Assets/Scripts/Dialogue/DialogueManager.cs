@@ -16,10 +16,8 @@ public class DialogueManager : MonoBehaviour
 {
     private static float TYPE_SPEED_MEDIUM = 0.05f;
 
-    public DialogueAnimator dialogueAnimator;
 
     public Text nameText;
-    public Text messageText;
     public TMP_Text m_MessageText;
     public VertexJitter m_VertexJitter;
     public VertexColor m_VertexColor;
@@ -27,33 +25,31 @@ public class DialogueManager : MonoBehaviour
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Animator animator;
 
+    // allows us to see the current strings in the inspector
     public string X_message;
     public string X_typewriter;
 
+    // the current (variable) type speed and the player's selected type speed
+    public float defaultTypeSpeed;
     public float typeSpeed;
 
     private bool inDialogue;
     private bool isTyping;
+    private bool isSkippable;
 
-    public List<string> currentRichTextTags;
-    public string currentString;
-    public string tempString;
-    public bool isParsingTag;
-
-    public DialogueGraph dialogue;
-    public Chat current;
+    private DialogueGraph dialogue;
+    private Chat current;
     
     // Start is called before the first frame update
     void Start()
     {
+        defaultTypeSpeed = TYPE_SPEED_MEDIUM;
         inDialogue = false;
         isTyping = false;
         // disable all buttons
         decisionChoice1.transform.parent.gameObject.SetActive(false);
         decisionChoice2.transform.parent.gameObject.SetActive(false);
         decisionChoice3.transform.parent.gameObject.SetActive(false);
-
-        currentRichTextTags = new List<string>();
     }
 
     // Update is called once per frame
@@ -64,13 +60,15 @@ public class DialogueManager : MonoBehaviour
             if(Input.GetKeyDown("e"))
             {
                 // if still typing, complete sentence
-                if (isTyping)
+                if (isSkippable)
                 {
-                    Debug.Log("Skipping dialogue");
+                    
                     StopAllCoroutines();
                     isTyping = false;
+                    isSkippable = false;
 
-                    m_MessageText.text = "";
+                    typeSpeed = defaultTypeSpeed;
+                    m_MessageText.text = ""; // needed to properly reset vertices
                     m_MessageText.text = StripTypewriterCommands(dialogue.current.text);
                     m_VertexColor.ColorAllVertices();
                     ShowAnswers(); // show answers, if any
@@ -78,9 +76,8 @@ public class DialogueManager : MonoBehaviour
                 else
                 {
                     // if there are no responses, continue to next dialogue
-                    if(dialogue.current.answers.Count == 0)
+                    if(!isTyping && dialogue.current.answers.Count == 0)
                     {
-                        Debug.Log("Next Dialogue");
                         dialogue.AnswerQuestion(0);
                         ShowDialogue();
                     }
@@ -108,7 +105,6 @@ public class DialogueManager : MonoBehaviour
     /// <param name="i"></param>
     public void SelectAnswer(int i)
     {
-        Debug.Log("Answered " + i.ToString());
         dialogue.AnswerQuestion(i);
         ShowDialogue();
     }
@@ -128,9 +124,6 @@ public class DialogueManager : MonoBehaviour
         decisionChoice2.transform.parent.gameObject.SetActive(false);
         decisionChoice3.transform.parent.gameObject.SetActive(false);
 
-        // reset DialogueAnimator jittering
-        dialogueAnimator.Reset();
-
         // set name
         nameText.text = current.character.m_name;
 
@@ -147,15 +140,19 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TMP_TypeMessage(current.text));
     }
 
+    /// <summary>
+    /// Types the message out to the TextMesh Pro text box. Prints the Rich Text with an alpha of zero and reveals each character based on the typing speed.
+    /// </summary>
+    /// <param name="message">A string containing both typewriter commands and rich text</param>
     IEnumerator TMP_TypeMessage(string message)
     {
         m_MessageText.text = "";
         yield return new WaitForSeconds(0.3f);
         m_VertexJitter.ResetJitter();
+        isSkippable = true;
 
         string messageText = StripTypewriterCommands(message);
         string typewriterText = ToTypewriterCommands(message);
-
         X_message = messageText;
         X_typewriter = typewriterText;
 
@@ -192,7 +189,7 @@ public class DialogueManager : MonoBehaviour
                     }
                     else if (tag[1] == '/' && tag[2] == 's')
                     {
-                        typeSpeed = TYPE_SPEED_MEDIUM;
+                        typeSpeed = defaultTypeSpeed;
                     }
 
                     parsing = false;
@@ -219,12 +216,17 @@ public class DialogueManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Finished typeing");
 
         ShowAnswers();
         isTyping = false;
+        isSkippable = false;
     }
 
+    /// <summary>
+    /// Removes all rich-text from the string so it only contains typewriter commands
+    /// </summary>
+    /// <param name="message">A string containing rich text</param>
+    /// <returns>The string with no rich text</returns>
     private string ToTypewriterCommands(string message)
     {
         string result = "";
@@ -260,6 +262,11 @@ public class DialogueManager : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// Removes all the typewriter commands
+    /// </summary>
+    /// <param name="message">A message with both rich text and typewriter commands</param>
+    /// <returns>A message only containing rich text which can be placed directly in the text box</returns>
     private string StripTypewriterCommands(string message)
     {
         string result = "";
