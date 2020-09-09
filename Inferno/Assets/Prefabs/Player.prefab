@@ -177,6 +177,7 @@ MonoBehaviour:
   maxHealth: 100
   gameLogic: {fileID: 0}
   meleeDamage: 0
+  currHealth: 0
 --- !u!50 &5203860726923884726
 Rigidbody2D:
   serializedVersion: 4
