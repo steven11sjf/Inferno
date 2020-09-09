@@ -18,7 +18,6 @@ public class DialogueManager : MonoBehaviour
 
 
     public Text nameText;
-    public Text messageText;
     public TMP_Text m_MessageText;
     public VertexJitter m_VertexJitter;
     public VertexColor m_VertexColor;
@@ -38,13 +37,8 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping;
     private bool isSkippable;
 
-    public List<string> currentRichTextTags;
-    public string currentString;
-    public string tempString;
-    public bool isParsingTag;
-
-    public DialogueGraph dialogue;
-    public Chat current;
+    private DialogueGraph dialogue;
+    private Chat current;
     
     // Start is called before the first frame update
     void Start()
@@ -56,8 +50,6 @@ public class DialogueManager : MonoBehaviour
         decisionChoice1.transform.parent.gameObject.SetActive(false);
         decisionChoice2.transform.parent.gameObject.SetActive(false);
         decisionChoice3.transform.parent.gameObject.SetActive(false);
-
-        currentRichTextTags = new List<string>();
     }
 
     // Update is called once per frame
@@ -227,6 +219,7 @@ public class DialogueManager : MonoBehaviour
 
         ShowAnswers();
         isTyping = false;
+        isSkippable = false;
     }
 
     /// <summary>
