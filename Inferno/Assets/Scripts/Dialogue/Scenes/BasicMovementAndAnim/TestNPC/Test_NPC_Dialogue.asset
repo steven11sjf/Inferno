@@ -273,7 +273,7 @@ MonoBehaviour:
   - {fileID: -2375296982763254534}
   - {fileID: 8309115395292917336}
   - {fileID: 3406803262475549159}
-  current: {fileID: 6402205834937311888}
+  current: {fileID: 8309115395292917336}
   sceneGraph: {fileID: 0}
 --- !u!114 &3406803262475549159
 MonoBehaviour:
@@ -557,5 +557,5 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 89733cd8ccd19284f80a50305c266aae, type: 2}
   isDialogueEnd: 0
-  text: Oh, <speed=0.3><b><i>you're</i> fine!</b></speed>
+  text: Oh, <speed=0.15><b><i>you're</i> fine!</b></speed>
   answers: []

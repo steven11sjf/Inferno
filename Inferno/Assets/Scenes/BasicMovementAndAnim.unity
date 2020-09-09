@@ -14130,8 +14130,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282082574
-  m_fontColor: {r: 0.054200795, g: 0.3962264, b: 0.23176739, a: 1}
+    rgba: 3892494
+  m_fontColor: {r: 0.054200795, g: 0.3962264, b: 0.23176739, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -14254,6 +14254,7 @@ MonoBehaviour:
   AngleMultiplier: 1
   SpeedMultiplier: 20
   CurveScale: 5
+  m_IsAnimated: 
 --- !u!114 &1526442319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21397,7 +21398,7 @@ PrefabInstance:
     - target: {fileID: 93174871658953480, guid: 90a387cda1f9e1f4eb1f754862ce872b,
         type: 3}
       propertyPath: typeSpeed
-      value: 0.1
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 93174871658953480, guid: 90a387cda1f9e1f4eb1f754862ce872b,
         type: 3}

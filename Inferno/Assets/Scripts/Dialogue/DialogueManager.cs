@@ -15,7 +15,6 @@ using System.Threading;
 public class DialogueManager : MonoBehaviour
 {
     private static float TYPE_SPEED_MEDIUM = 0.05f;
-    private static float END_OF_SENTENCE_DELAY = 0.15f;
 
     public DialogueAnimator dialogueAnimator;
 
@@ -23,6 +22,7 @@ public class DialogueManager : MonoBehaviour
     public Text messageText;
     public TMP_Text m_MessageText;
     public VertexJitter m_VertexJitter;
+    public VertexColor m_VertexColor;
     public Image decisionBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Animator animator;
@@ -35,13 +35,10 @@ public class DialogueManager : MonoBehaviour
     private bool inDialogue;
     private bool isTyping;
 
-    private bool isTextJittering;
-
     public List<string> currentRichTextTags;
     public string currentString;
     public string tempString;
     public bool isParsingTag;
-    private int currentCharIndex;
 
     public DialogueGraph dialogue;
     public Chat current;
@@ -69,16 +66,13 @@ public class DialogueManager : MonoBehaviour
                 // if still typing, complete sentence
                 if (isTyping)
                 {
-                    Debug.Log("Entering IsTyping");
+                    Debug.Log("Skipping dialogue");
                     StopAllCoroutines();
-
                     isTyping = false;
-                    currentRichTextTags.Clear();
-                    currentString = "";
-                    tempString = "";
-                    isParsingTag = false;
 
-                    m_MessageText.text = ParseMessage(dialogue.current.text);
+                    m_MessageText.text = "";
+                    m_MessageText.text = StripTypewriterCommands(dialogue.current.text);
+                    m_VertexColor.ColorAllVertices();
                     ShowAnswers(); // show answers, if any
                 }
                 else
@@ -86,6 +80,7 @@ public class DialogueManager : MonoBehaviour
                     // if there are no responses, continue to next dialogue
                     if(dialogue.current.answers.Count == 0)
                     {
+                        Debug.Log("Next Dialogue");
                         dialogue.AnswerQuestion(0);
                         ShowDialogue();
                     }
@@ -145,6 +140,8 @@ public class DialogueManager : MonoBehaviour
         // open dialogue
         animator.SetBool("IsOpen", true);
 
+        isTyping = true;
+
         // start coroutine to type
         StopAllCoroutines();
         StartCoroutine(TMP_TypeMessage(current.text));
@@ -152,7 +149,8 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator TMP_TypeMessage(string message)
     {
-        isTyping = true;
+        m_MessageText.text = "";
+        yield return new WaitForSeconds(0.3f);
         m_VertexJitter.ResetJitter();
 
         string messageText = StripTypewriterCommands(message);
@@ -162,7 +160,7 @@ public class DialogueManager : MonoBehaviour
         X_typewriter = typewriterText;
 
         m_MessageText.text = messageText;
-        // TODO SetTextClear();
+        m_VertexColor.UncolorAllVertices();
 
         bool parsing = false;
         string tag = "";
@@ -211,13 +209,13 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                // TODO ShowNextChar()
+                m_VertexColor.ColorVertex();
                 ++cur;
                 yield return new WaitForSeconds(typeSpeed);
 
                 if (c == '.' || c == '!' || c == '?')
                 {
-                    yield return new WaitForSeconds(typeSpeed * 2.5f);
+                    yield return new WaitForSeconds(typeSpeed * 2f);
                 }
             }
         }
@@ -288,6 +286,10 @@ public class DialogueManager : MonoBehaviour
                         {
                             isJittering = false;
                         }
+                        else
+                        {
+                            result += tag;
+                        }
                     }
                     parsing = false;
                 }
@@ -311,6 +313,7 @@ public class DialogueManager : MonoBehaviour
                 ++curr;
             }
         }
+        X_message = result;
 
         return result;
     }
@@ -414,240 +417,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Prints message using typewriter effect at rate of one letter per speed frames
-    /// </summary>
-    /// <param name="message">The text to put in the dialogue box's main text</param>
-    /// <param name="speed">how fast to print letters</param>
-    /// <returns></returns>
-    IEnumerator TypeMessage(string message)
-    {
-        m_VertexJitter.ResetJitter();
-
-        currentCharIndex = 0;
-        isTextJittering = false;
-        isTyping = true;
-        m_MessageText.text = "";
-        currentString = "";
-
-        foreach (char letter in message.ToCharArray())
-        {
-            if (isParsingTag)
-            {
-                if (letter == '>')
-                {
-                    tempString += letter;
-                    float pauseFrames = ParseTag(tempString);
-                    isParsingTag = false;
-
-                    float unpauseTime = Time.time + pauseFrames;
-                    while(unpauseTime > Time.time)
-                    {
-                        yield return null;
-                    }
-                }
-                else
-                {
-                    tempString += letter;
-                }
-            }
-            else if (letter == '<')
-            {
-                isParsingTag = true;
-                tempString = "<";
-            }
-            else
-            {
-                yield return new WaitForSeconds(typeSpeed);
-
-                currentString += letter;
-                if (isTextJittering) m_VertexJitter.AddJitterToCharacter(currentCharIndex);
-                ++currentCharIndex;
-            }
-
-            // print current string to text box
-            string temp = currentString;
-            foreach(string s in currentRichTextTags)
-            {
-                temp += s;
-            }
-            m_MessageText.text = temp;
-
-            // add delay if end of a sentence
-            if (letter == '.' || letter == '?' || letter == '!')
-            {
-                yield return new WaitForSeconds(END_OF_SENTENCE_DELAY);
-            }
-        }
-
-        ShowAnswers();
-
-        isTyping = false;
-    }
-
-    string ParseMessage(string message)
-    {
-        string result = "";
-        
-        m_MessageText.text = "";
-        currentString = "";
-        currentCharIndex = 0;
-        isTextJittering = false;
-
-        foreach (char letter in message.ToCharArray())
-        {
-            if (isParsingTag)
-            {
-                if (letter == '>')
-                {
-                    tempString += letter;
-                    ParseTag(tempString);
-                    isParsingTag = false;
-                }
-                else
-                {
-                    tempString += letter;
-                }
-            }
-            else if (letter == '<')
-            {
-                isParsingTag = true;
-                tempString = "<";
-            }
-            else
-            {
-                currentString += letter;
-                if (isTextJittering) m_VertexJitter.AddJitterToCharacter(currentCharIndex);
-                ++currentCharIndex;
-            }
-        }
-        result = currentString;
-        return result;
-    }
-
-    /// <summary>
-    /// Parses a tag given by the DialogueManager
-    /// </summary>
-    /// <param name="tag">The tag read from the string</param>
-    /// <returns>the number of frames to pause after the tag</returns>
-    private float ParseTag(string tag)
-    {
-        float retVal = 0.0f;
-        char[] charArr = tag.ToCharArray();
-
-        string toParse;
-        switch (charArr[1])
-        {
-            // bold
-            case 'b':
-                currentString += "<b>";
-                currentRichTextTags.Insert(0, "</b>");
-                break;
-
-            // italics
-            case 'i':
-                currentString += "<i>";
-                currentRichTextTags.Insert(0, "</i>");
-                break;
-
-            // pause typing
-            case 'p':
-                float pauseLength;
-                toParse = tag.Substring(7, tag.Length - 8);
-
-                float.TryParse(toParse, out pauseLength);
-                retVal = pauseLength;
-                break;
-
-            // change color
-            case 'c':
-                currentString += tag;
-                currentRichTextTags.Insert(0, "</color>");
-                break;
-
-            // change speed
-            case 's':
-                float newSpeed;
-                toParse = tag.Substring(7, tag.Length - 8);
-
-                float.TryParse(toParse, out newSpeed);
-                typeSpeed = newSpeed;
-                break;
-
-            // enable text jitter
-            case 'j':
-                Debug.Log("Jittering!");
-                isTextJittering = true;
-                break;
-
-            // closing tag
-            case '/':
-                switch (charArr[2])
-                {
-                    // bold
-                    case 'b':
-                        if (currentRichTextTags.First().Equals("</b>"))
-                        {
-                            currentString += "</b>";
-                            currentRichTextTags.RemoveAt(0);
-                        }
-                        else
-                        {
-                            Debug.Log("DialogueManager: Expected " + currentRichTextTags.First() + " not </b>");
-                        }
-                        break;
-
-                    // italics
-                    case 'i':
-                        if (currentRichTextTags.First().Equals("</i>"))
-                        {
-                            currentString += "</i>";
-                            currentRichTextTags.RemoveAt(0);
-                        }
-                        else
-                        {
-                            Debug.Log("DialogueManager: Expected " + currentRichTextTags.First() + " not </i>");
-                        }
-                        break;
-
-                    // color
-                    case 'c':
-                        if (currentRichTextTags.First().Equals("</color>"))
-                        {
-                            currentString += "</color>";
-                            currentRichTextTags.RemoveAt(0);
-                        }
-                        else
-                        {
-                            Debug.Log("DialogueManager: Expected " + currentRichTextTags.First() + " not " + tag);
-                        }
-                        break;
-
-                    // speed
-                    case 's':
-                        typeSpeed = TYPE_SPEED_MEDIUM;
-                        break;
-
-                    // remove jittering
-                    case 'j':
-                        isTextJittering = false;
-                        break;
-
-                    // unknown
-                    default:
-
-                        break;
-                }
-                break;
-
-            default:
-
-                break;
-        }
-
-        return retVal;
-    }
-
+ 
     /// <summary>
     /// Resets the DialogueManager's state and hides the dialogue box
     /// </summary>
