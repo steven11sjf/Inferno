@@ -17,7 +17,6 @@ public class Test_NPC_SceneGraph : DialogueSceneGraph
 
     public override void DoCutsceneAction(string action, string[] args)
     {
-        Debug.Log("Doing something");
         switch(action)
         {
             case "PlayerMoveUp":

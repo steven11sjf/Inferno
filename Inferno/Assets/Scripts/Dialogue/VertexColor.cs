@@ -26,7 +26,6 @@ public class VertexColor : MonoBehaviour
     {
         m_TextComponent.ForceMeshUpdate();
 
-        Debug.Log("Coloring all");
         m_CharToColor = 0;
         m_CharacterCount = m_TextComponent.textInfo.characterCount;
 
@@ -39,7 +38,6 @@ public class VertexColor : MonoBehaviour
         Color32[] newVertexColors;
         Color32 c0 = m_TextComponent.color;
         c0 = new Color32(c0.r, c0.g, c0.b, 255);
-        Debug.Log("c0: " + c0.ToString());
         int characterCount = textInfo.characterCount;
 
         for (int currentCharacter = 0; currentCharacter < characterCount; currentCharacter++)
@@ -77,7 +75,6 @@ public class VertexColor : MonoBehaviour
 
         m_TextComponent.ForceMeshUpdate();
 
-        Debug.Log("Uncoloring");
         m_CharToColor = 0;
         m_CharacterCount = m_TextComponent.textInfo.characterCount;
 
