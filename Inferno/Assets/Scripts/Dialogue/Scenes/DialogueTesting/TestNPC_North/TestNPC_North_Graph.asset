@@ -326,7 +326,7 @@ MonoBehaviour:
   character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
   isDialogueEnd: 0
   text: I'm gonna make a <b>TikTok Documentary</b> of <color=yellow>Hell</color>
-    and show the world what it's <j>really</j> like here!
+    and show the world what it's <wave>really</wave> like here!
   answers: []
 --- !u!114 &11400000
 MonoBehaviour:
@@ -353,7 +353,7 @@ MonoBehaviour:
   - {fileID: -7948405420515350427}
   - {fileID: 2229277449187576081}
   - {fileID: 8166783863737199453}
-  current: {fileID: 2229277449187576081}
+  current: {fileID: 1024873381014791413}
   sceneGraph: {fileID: 0}
 --- !u!114 &1024873381014791413
 MonoBehaviour:
@@ -473,7 +473,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 666ebdfc98daeae4a958bfb8009b53bc, type: 2}
   isDialogueEnd: 0
-  text: Well, <pause=0.5>shit, why not? <j>Bring me along too!</j>
+  text: Well, <pause=0.5>shit, why not? <wave>Bring me along too!</wave>
   answers: []
 --- !u!114 &6087757414043857678
 MonoBehaviour:
@@ -533,7 +533,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 666ebdfc98daeae4a958bfb8009b53bc, type: 2}
   isDialogueEnd: 0
-  text: 'This is the <j>eighth circle!</j>
+  text: 'This is the <wave>eighth circle!</wave>
 
     This is <color=blue>Steven</color>''s
     little hellhole... mostly because he always works on this at <i>stupid late</i>

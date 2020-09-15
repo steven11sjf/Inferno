@@ -16,22 +16,27 @@ public class DialogueManager : MonoBehaviour
 {
     private static float TYPE_SPEED_MEDIUM = 0.05f;
 
-
-    public Text nameText;
-    public TMP_Text m_MessageText;
-    public VertexJitter m_VertexJitter;
-    public VertexColor m_VertexColor;
-    public Image decisionBox;
+    public GameObject DialogueBox;
+    public GameObject NameTextBox;
+    public GameObject MainDialogueBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
-    public Animator animator;
+    
+    private Text NameText;
+    private TMP_Text MessageText;
+    private VertexWave VertexWaveObject;
+    private VertexColor VertexColorObject;
+    private Image DialogueBoxName;
+    private Animator DialogueBoxAnimator;
+
+
 
     // allows us to see the current strings in the inspector
     public string X_message;
     public string X_typewriter;
 
     // the current (variable) type speed and the player's selected type speed
-    public float defaultTypeSpeed;
-    public float typeSpeed;
+    public float DefaultMediumTypeSpeed;
+    public float TypeSpeed;
 
     private bool inDialogue;
     private bool isTyping;
@@ -43,9 +48,18 @@ public class DialogueManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        defaultTypeSpeed = TYPE_SPEED_MEDIUM;
+        NameText = NameTextBox.GetComponent<Text>();
+        MessageText = MainDialogueBox.GetComponent<TMP_Text>();
+        VertexWaveObject = MainDialogueBox.GetComponent<VertexWave>();
+        VertexColorObject = MainDialogueBox.GetComponent<VertexColor>();
+        DialogueBoxName = DialogueBox.GetComponent<Image>();
+        DialogueBoxAnimator = DialogueBox.GetComponent<Animator>();
+        DefaultMediumTypeSpeed = TYPE_SPEED_MEDIUM;
         inDialogue = false;
         isTyping = false;
+
+        TypeSpeed = DefaultMediumTypeSpeed;
+
         // disable all buttons
         decisionChoice1.transform.parent.gameObject.SetActive(false);
         decisionChoice2.transform.parent.gameObject.SetActive(false);
@@ -67,10 +81,10 @@ public class DialogueManager : MonoBehaviour
                     isTyping = false;
                     isSkippable = false;
 
-                    typeSpeed = defaultTypeSpeed;
-                    m_MessageText.text = ""; // needed to properly reset vertices
-                    m_MessageText.text = StripTypewriterCommands(dialogue.current.text);
-                    m_VertexColor.ColorAllVertices();
+                    TypeSpeed = DefaultMediumTypeSpeed;
+                    MessageText.text = ""; // needed to properly reset vertices
+                    MessageText.text = StripTypewriterCommands(dialogue.current.text);
+                    VertexColorObject.ColorAllVertices();
                     ShowAnswers(); // show answers, if any
                 }
                 else
@@ -117,7 +131,11 @@ public class DialogueManager : MonoBehaviour
         if (dialogue == null) return;
 
         current = dialogue.current;
-        if (current == null) Debug.Log("DialogueManager: null");
+        if (current == null)
+        {
+            Debug.Log("DialogueManager: null");
+            
+        }
 
         // disable all buttons
         decisionChoice1.transform.parent.gameObject.SetActive(false);
@@ -125,13 +143,13 @@ public class DialogueManager : MonoBehaviour
         decisionChoice3.transform.parent.gameObject.SetActive(false);
 
         // set name
-        nameText.text = current.character.m_name;
+        NameText.text = current.character.m_name;
 
         // set color
-        decisionBox.color = current.character.color;
+        DialogueBoxName.color = current.character.color;
 
         // open dialogue
-        animator.SetBool("IsOpen", true);
+        DialogueBoxAnimator.SetBool("IsOpen", true);
 
         isTyping = true;
 
@@ -146,9 +164,9 @@ public class DialogueManager : MonoBehaviour
     /// <param name="message">A string containing both typewriter commands and rich text</param>
     IEnumerator TMP_TypeMessage(string message)
     {
-        m_MessageText.text = "";
+        MessageText.text = "";
         yield return new WaitForSeconds(0.3f);
-        m_VertexJitter.ResetJitter();
+        VertexWaveObject.ResetCharacterWave();
         isSkippable = true;
 
         string messageText = StripTypewriterCommands(message);
@@ -156,8 +174,8 @@ public class DialogueManager : MonoBehaviour
         X_message = messageText;
         X_typewriter = typewriterText;
 
-        m_MessageText.text = messageText;
-        m_VertexColor.UncolorAllVertices();
+        MessageText.text = messageText;
+        VertexColorObject.UncolorAllVertices();
 
         bool parsing = false;
         string tag = "";
@@ -171,25 +189,30 @@ public class DialogueManager : MonoBehaviour
                 {
                     tag += ">";
 
-                    if (tag[1] == 'p')
-                    {
-                        float pauseLength;
-                        substring = tag.Substring(7, tag.Length - 8);
+                    string command, param;
+                    SplitTag(tag, out command, out param);
 
-                        float.TryParse(substring, out pauseLength);
-                        yield return new WaitForSeconds(pauseLength);
-                    }
-                    else if (tag[1] == 's')
+                    switch(command)
                     {
-                        float newSpeed;
-                        substring = tag.Substring(7, tag.Length - 8);
+                        case "pause":
+                            float pauseLength;
+                            substring = param;
 
-                        float.TryParse(substring, out newSpeed);
-                        typeSpeed = newSpeed;
-                    }
-                    else if (tag[1] == '/' && tag[2] == 's')
-                    {
-                        typeSpeed = defaultTypeSpeed;
+                            float.TryParse(param, out pauseLength);
+                            yield return new WaitForSeconds(pauseLength);
+                            break;
+
+                        case "speed":
+                            float newSpeed;
+                            substring = param;
+
+                            float.TryParse(substring, out newSpeed);
+                            TypeSpeed = newSpeed;
+                            break;
+
+                        case "/speed":
+                            TypeSpeed = DefaultMediumTypeSpeed;
+                            break;
                     }
 
                     parsing = false;
@@ -206,13 +229,13 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                m_VertexColor.ColorVertex();
+                VertexColorObject.ColorVertex();
                 ++cur;
-                yield return new WaitForSeconds(typeSpeed);
+                yield return new WaitForSeconds(TypeSpeed);
 
                 if (c == '.' || c == '!' || c == '?')
                 {
-                    yield return new WaitForSeconds(typeSpeed * 2f);
+                    yield return new WaitForSeconds(TypeSpeed * 2f);
                 }
             }
         }
@@ -273,7 +296,7 @@ public class DialogueManager : MonoBehaviour
 
         string tag = "";
         bool parsing = false;
-        bool isJittering = false;
+        bool isWaving = false;
         int curr = 0;
         foreach (char letter in message.ToCharArray())
         {
@@ -285,17 +308,21 @@ public class DialogueManager : MonoBehaviour
                     bool res = InterpretTag(tag);
                     if(!res)
                     {
-                        if (tag[1] == 'j')
+                        string command, param;
+                        SplitTag(tag, out command, out param);
+                        switch (command)
                         {
-                            isJittering = true;
-                        }
-                        else if (tag[1] == '/' && tag[2] == 'j')
-                        {
-                            isJittering = false;
-                        }
-                        else
-                        {
-                            result += tag;
+                            case "wave":
+                                isWaving = true;
+                                break;
+
+                            case "/wave":
+                                isWaving = false;
+                                break;
+
+                            default:
+                                result += tag;
+                                break;
                         }
                     }
                     parsing = false;
@@ -313,9 +340,9 @@ public class DialogueManager : MonoBehaviour
             else
             {
                 result += letter;
-                if (isJittering)
+                if (isWaving)
                 {
-                    m_VertexJitter.AddJitterToCharacter(curr);
+                    VertexWaveObject.AddWaveToCharacter(curr);
                 }
                 ++curr;
             }
@@ -323,6 +350,30 @@ public class DialogueManager : MonoBehaviour
         X_message = result;
 
         return result;
+    }
+
+    /// <summary>
+    /// Splits a tag into a command and the parameter provided
+    /// </summary>
+    /// <param name="tag">The unchanged tag parsed</param>
+    /// <param name="command">either the contents of the tag or the part of the tag between left angle-bracket and equals sign </param>
+    /// <param name="param">An empty string or the part of the tag between equals and right angle-bracket </param>
+    /// <returns>true if the tag has a parameter</returns>
+    private bool SplitTag(string tag, out string command, out string param)
+    {
+        int indexOfEquals = tag.IndexOf("=");
+        if(indexOfEquals == -1)
+        {
+            command = tag.Substring(1, tag.IndexOf(">") - 1);
+            param = "";
+            return false;
+        }
+        else
+        {
+            command = tag.Substring(1, indexOfEquals - 1);
+            param = tag.Substring(indexOfEquals + 1, tag.IndexOf(">") - indexOfEquals - 1);
+            return true;
+        }
     }
     
     /// <summary>
@@ -335,64 +386,33 @@ public class DialogueManager : MonoBehaviour
         bool result = false;
         char[] tagArray = tag.ToCharArray();
 
-        switch (tagArray[1])
+        string command;
+        string param;
+        SplitTag(tag, out command, out param);
+
+        switch(command)
         {
-            case 'b':
+            case "b":
+            case "/b":
+            case "i":
+            case "/i":
+            case "color":
+            case "/color":
+            case "size":
+            case "/size":
+            case "wave":
+            case "/wave":
                 result = false;
                 break;
 
-            case 'i':
-                result = false;
-                break;
-
-            case 'c':
-                result = false;
-                break;
-
-            case 's':
-                if (tagArray[2] == 'i') result = false;
-                else result = true;
-                break;
-
-            case 'j':
-                result = false;
-                break;
-
-            case 'p':
+            case "speed":
+            case "/speed":
+            case "pause":
                 result = true;
                 break;
 
-            case '/':
-                switch (tagArray[2])
-                {
-                    case 'b':
-                        result = false;
-                        break;
-
-                    case 'i':
-                        result = false;
-                        break;
-
-                    case 'c':
-                        result = false;
-                        break;
-
-                    case 's':
-                        if (tagArray[3] == 'i') result = false;
-                        else result = true;
-                        break;
-
-                    case 'j':
-                        result = false;
-                        break;
-                    default:
-                        Debug.Log("DialogueManager: Tag not found " + tag);
-                        break;
-                }
-                break;
-
             default:
-                Debug.Log("DialogueManager: Tag not found " + tag);
+                Debug.Log("Command not found!");
                 break;
         }
 
@@ -433,6 +453,6 @@ public class DialogueManager : MonoBehaviour
         inDialogue = false;
         current = null;
         dialogue = null;
-        animator.SetBool("IsOpen", false);
+        DialogueBoxAnimator.SetBool("IsOpen", false);
     }
 }
