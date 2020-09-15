@@ -99,7 +99,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
   isDialogueEnd: 0
-  text: Hey man, what <color=yellow>circle of hell</color> is this?
+  text: <jitter>Hey man, what <color=yellow>circle of hell</color> is this?</jitter>
   answers: []
 --- !u!114 &-8348396356007441459
 MonoBehaviour:

@@ -24,6 +24,7 @@ public class DialogueManager : MonoBehaviour
     private Text NameText;
     private TMP_Text MessageText;
     private VertexWave VertexWaveObject;
+    private VertexJitter VertexJitterObject;
     private VertexColor VertexColorObject;
     private Image DialogueBoxName;
     private Animator DialogueBoxAnimator;
@@ -51,6 +52,7 @@ public class DialogueManager : MonoBehaviour
         NameText = NameTextBox.GetComponent<Text>();
         MessageText = MainDialogueBox.GetComponent<TMP_Text>();
         VertexWaveObject = MainDialogueBox.GetComponent<VertexWave>();
+        VertexJitterObject = MainDialogueBox.GetComponent<VertexJitter>();
         VertexColorObject = MainDialogueBox.GetComponent<VertexColor>();
         DialogueBoxName = DialogueBox.GetComponent<Image>();
         DialogueBoxAnimator = DialogueBox.GetComponent<Animator>();
@@ -167,6 +169,7 @@ public class DialogueManager : MonoBehaviour
         MessageText.text = "";
         yield return new WaitForSeconds(0.3f);
         VertexWaveObject.ResetCharacterWave();
+        VertexJitterObject.ResetCharacterJitter();
         isSkippable = true;
 
         string messageText = StripTypewriterCommands(message);
@@ -297,6 +300,7 @@ public class DialogueManager : MonoBehaviour
         string tag = "";
         bool parsing = false;
         bool isWaving = false;
+        bool isJittering = false;
         int curr = 0;
         foreach (char letter in message.ToCharArray())
         {
@@ -320,6 +324,14 @@ public class DialogueManager : MonoBehaviour
                                 isWaving = false;
                                 break;
 
+                            case "jitter":
+                                isJittering = true;
+                                break;
+
+                            case "/jitter":
+                                isJittering = false;
+                                break;
+
                             default:
                                 result += tag;
                                 break;
@@ -340,7 +352,12 @@ public class DialogueManager : MonoBehaviour
             else
             {
                 result += letter;
-                if (isWaving)
+                
+                if(isJittering)
+                {
+                    VertexJitterObject.AddJitterToCharacter(curr);
+                }
+                else if (isWaving)
                 {
                     VertexWaveObject.AddWaveToCharacter(curr);
                 }
@@ -402,6 +419,8 @@ public class DialogueManager : MonoBehaviour
             case "/size":
             case "wave":
             case "/wave":
+            case "jitter":
+            case "/jitter":
                 result = false;
                 break;
 
