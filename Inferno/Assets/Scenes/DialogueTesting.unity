@@ -300,7 +300,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestNPC_East
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5639216100684563505, guid: 9f621983322ac1542ad6482ec8d47b65, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9f621983322ac1542ad6482ec8d47b65, type: 3}
 --- !u!1001 &149706641
 PrefabInstance:
@@ -456,6 +457,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f621983322ac1542ad6482ec8d47b65, type: 3}
+--- !u!1 &219728225 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5639216100684563508, guid: 9f621983322ac1542ad6482ec8d47b65,
+    type: 3}
+  m_PrefabInstance: {fileID: 102295190}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &219728226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219728225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f9e02a9c99c7c4c8c1de63b3e1c398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueGraph: {fileID: 11400000, guid: c6541a19d3531254bbaf05c9e48e4844, type: 2}
+  gameLogic: {fileID: 0}
 --- !u!1 &227605016 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8390381856772291161, guid: c3bf0a7744c92aa4990a3e36bc74f474,
@@ -659,6 +680,26 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8390381856691080875, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856691080875, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856691080875, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856691080875, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8390381856772291160, guid: c3bf0a7744c92aa4990a3e36bc74f474,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -779,6 +820,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SelectAnswer
       objectReference: {fileID: 0}
+    - target: {fileID: 8390381856896949483, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856896949483, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856896949483, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 36.17035
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390381856896949483, guid: c3bf0a7744c92aa4990a3e36bc74f474,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 46.91
+      objectReference: {fileID: 0}
     - target: {fileID: 8390381857636375199, guid: c3bf0a7744c92aa4990a3e36bc74f474,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -789,7 +850,8 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SelectAnswer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8390381856691080876, guid: c3bf0a7744c92aa4990a3e36bc74f474, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c3bf0a7744c92aa4990a3e36bc74f474, type: 3}
 --- !u!114 &543424457 stripped
 MonoBehaviour:
