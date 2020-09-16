@@ -15,7 +15,7 @@ public class Test_NPC_SceneGraph : DialogueSceneGraph
         base.dialogueGraph.sceneGraph = this;
     }
 
-    public override void DoCutsceneAction(string action, string[] args)
+    public override void DoCustomCutsceneAction(string action, string[] args)
     {
         switch(action)
         {
@@ -25,9 +25,6 @@ public class Test_NPC_SceneGraph : DialogueSceneGraph
                 if (float.TryParse(args[0], out magnitude))
                     player.Move(Vector2.up * magnitude);
                 else player.Move(Vector2.up);
-                break;
-            case "EndDialogue":
-                base.gameLogic.EndDialogue();
                 break;
             case "PlayerHeal":
                 float amount;

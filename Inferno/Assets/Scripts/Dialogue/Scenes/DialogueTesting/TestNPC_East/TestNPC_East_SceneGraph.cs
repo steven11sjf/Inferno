@@ -1,17 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityScript.Steps;
 
-public class TestNPC_North_SceneGraph : DialogueSceneGraph
+public class TestNPC_East_SceneGraph : DialogueSceneGraph
 {
-    public Player player;
-
     new void Start()
     {
-        player = FindObjectOfType<Player>();
         base.Start();
-
         base.dialogueGraph.sceneGraph = this;
     }
 
