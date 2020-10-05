@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Dialogue;
 using UnityEngine;
+using UnityEngine.UI;
 using XNode;
 
 public abstract class DialogueSceneGraph : MonoBehaviour {
@@ -14,6 +16,11 @@ public abstract class DialogueSceneGraph : MonoBehaviour {
     public void Start()
     {
         gameLogic = FindObjectOfType<GameLogic>();
+    }
+
+    internal void ChangeAvatar(Sprite source)
+    {
+        gameLogic.ChangeAvatar(source);
     }
 
     /// <summary>

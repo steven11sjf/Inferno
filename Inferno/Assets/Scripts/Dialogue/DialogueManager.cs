@@ -20,10 +20,17 @@ public class DialogueManager : MonoBehaviour
     public GameObject NameTextBox;
     public GameObject MainDialogueBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
-    
+    public Image playerAvatar;
+
     private Text NameText;
     private TMP_Text MessageText;
     private VertexWave VertexWaveObject;
+
+    internal void ChangeAvatar(Sprite source)
+    {
+        playerAvatar.sprite = source;
+    }
+
     private VertexJitter VertexJitterObject;
     private VertexColor VertexColorObject;
     private Image DialogueBoxName;

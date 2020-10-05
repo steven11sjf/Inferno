@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Dialogue;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour
 {
@@ -14,6 +16,12 @@ public class GameLogic : MonoBehaviour
 
     private Health playerHealth; // the Health script for the player
     private Health enemyHealth; // the Health script for the enemy, set in Start()
+
+    internal void ChangeAvatar(Sprite source)
+    {
+        dialogueManager.ChangeAvatar(source);
+    }
+
     private bool paused; // true = paused
     private bool playerAlive; // true = player isn't dead
     private bool won; // true = victoryCondition eliminated
