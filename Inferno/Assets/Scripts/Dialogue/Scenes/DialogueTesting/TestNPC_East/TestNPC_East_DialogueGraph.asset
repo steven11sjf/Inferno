@@ -335,7 +335,7 @@ MonoBehaviour:
       _dynamic: 1
   input: {fileID: 0}
   output: {fileID: 0}
-  character: {fileID: 11400000, guid: 4ba86b4e610005441b3c1c90d4867f34, type: 2}
+  character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
   isDialogueEnd: 0
   text: Hello! I'm the Dialogue Testing NPC. What dialogue would you like to test?
   answers:
@@ -365,7 +365,7 @@ MonoBehaviour:
   - {fileID: -2290274001513887480}
   - {fileID: -7003025949639776616}
   - {fileID: 3005629614773963382}
-  current: {fileID: -7252938127376130255}
+  current: {fileID: -303320518650020560}
   sceneGraph: {fileID: 0}
 --- !u!114 &3005629614773963382
 MonoBehaviour:
@@ -409,7 +409,7 @@ MonoBehaviour:
       _dynamic: 0
   input: {fileID: 0}
   output: {fileID: 0}
-  source: {fileID: -3753825769889500098, guid: 4c7a1a8b72b01bc459fea70ec5a460f1, type: 3}
+  source: {fileID: -2852443166016097488, guid: 25b6fcea5b979b0439cafe58602eb5be, type: 3}
 --- !u!114 &5932203657522589700
 MonoBehaviour:
   m_ObjectHideFlags: 0
