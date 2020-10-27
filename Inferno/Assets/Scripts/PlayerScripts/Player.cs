@@ -7,9 +7,11 @@ public class Player : MonoBehaviour
     public Vector2 m_vel;
     public int moveTimer;
 
-    public float DASH_COOLDOWN = 5.0f;
-    public float DIVE_SPEED = 4.0f;
-    public float DIVE_TIME;
+    public float DEFAULT_X_MOVEMENT_MULT;
+    public float DEFAULT_Y_MOVEMENT_MULT;
+    public float DEFAULT_DASH_COOLDOWN = 5.0f;
+    public float DEFAULT_DIVE_SPEED = 4.0f;
+    public float DEFAULT_DIVE_TIME;
     public float ROLL_SPEED = 2.0f;
     public float ROLL_TIME;
 
@@ -38,6 +40,12 @@ public class Player : MonoBehaviour
     private Vector3 dashDir; // the direction of the sprint
     private float dashCooldownTime; // the time the dash is available
 
+    public float x_movement_mult;
+    public float y_movement_mult;
+    public float dash_cooldown;
+    public float dive_speed;
+    public float dive_time;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +53,12 @@ public class Player : MonoBehaviour
         dashing = 0;
         dashCooldownTime = 0.0f;
         m_vel = Vector2.zero;
+
+        x_movement_mult = DEFAULT_X_MOVEMENT_MULT;
+        y_movement_mult = DEFAULT_Y_MOVEMENT_MULT;
+        dash_cooldown = DEFAULT_DASH_COOLDOWN;
+        dive_speed = DEFAULT_DIVE_SPEED;
+        dive_time = DEFAULT_DIVE_TIME;
     }
 
     // Update is called once per frame
@@ -82,7 +96,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Magnitude", movement.magnitude);
 
-        rb.velocity = new Vector2(movement.x, movement.y);
+        rb.velocity = new Vector2(movement.x * x_movement_mult, movement.y * y_movement_mult);
         if (moveTimer > 0)
         {
             rb.velocity += m_vel;
@@ -116,7 +130,7 @@ public class Player : MonoBehaviour
 
             // set the direction vector and distance
             dashDir = movement;
-            dashDist = DIVE_TIME;
+            dashDist = dive_time;
 
             return 0;
         }
@@ -125,7 +139,7 @@ public class Player : MonoBehaviour
             float t = Time.deltaTime; // get time
             if (dashDist < t) // if this is the last frame of the dive, dive the remaining distance and roll
             {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * DIVE_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * dive_speed;
                 Debug.Log(rb.velocity);
                 dashing = 2;
                 dashDist = ROLL_TIME;
@@ -134,7 +148,7 @@ public class Player : MonoBehaviour
             }
             else // if this is not the last frame of the dive, dive according to time passed
             {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * DIVE_SPEED;
+                rb.velocity = new Vector2(dashDir.x, dashDir.y) * dive_speed;
                 dashDist -= t;
             }
 
@@ -153,7 +167,7 @@ public class Player : MonoBehaviour
 
                 dashing = 0;
                 animator.SetInteger("DashState", 0);
-                dashCooldownTime = t + DASH_COOLDOWN; // set the cd timer
+                dashCooldownTime = Time.time + dash_cooldown; // set the cd timer
             }
             else
             {
@@ -183,6 +197,8 @@ public class Player : MonoBehaviour
 
     public void Interact()
     {
+
+        gameObject.GetComponent<EquipAbilities>().SetAbilities();
         // get a normalized vector pointing from Daniel to the crosshair
         Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
         danielToCrosshair.Normalize();
