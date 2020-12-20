@@ -13,6 +13,6 @@ public class StrongerPistol : Ability
         effects[0].effects.Add("pistolDmg", 1.0f);
         effects[0].effects.Add("pistolFireRate", 0.7f);
         effects[0].effects.Add("pistolSpread", 1.0f);
-        effects[0].effects.Add("pistolBulletSpeed", 2.0f);
+        effects[0].effects.Add("pistolBulletSpeed", 3.0f);
     }
 }

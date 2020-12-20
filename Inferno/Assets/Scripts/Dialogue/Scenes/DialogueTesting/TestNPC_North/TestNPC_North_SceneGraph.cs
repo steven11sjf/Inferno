@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityScript.Steps;
+﻿using UnityEngine;
 
 public class TestNPC_North_SceneGraph : DialogueSceneGraph
 {

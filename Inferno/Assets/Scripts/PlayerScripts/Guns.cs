@@ -28,8 +28,8 @@ struct Gun
 public class Guns : MonoBehaviour
 {
     public float GUN_SWAP_TIME;
-    public GameObject player;
-    public GameObject crosshair;
+    private GameObject player;
+    private GameObject crosshair;
     public GameObject bulletPrefab;
 
     private GameLogic gameLogic;
@@ -79,6 +79,8 @@ public class Guns : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = gameObject;
+        crosshair = player.GetComponent<Player>().m_Crosshair;
         swap_time = GUN_SWAP_TIME;
 
         gameLogic = FindObjectOfType<GameLogic>();

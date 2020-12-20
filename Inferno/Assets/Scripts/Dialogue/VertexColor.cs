@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class VertexColor : MonoBehaviour
 {
-    private int MAX_CHARACTER_COUNT = 1024;
 
     private TMP_Text m_TextComponent;
 

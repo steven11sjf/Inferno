@@ -1,64 +1,67 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public Vector2 m_vel;
-    public int moveTimer;
+    public int m_moveTimer;
 
-    public float DEFAULT_X_MOVEMENT_MULT;
-    public float DEFAULT_Y_MOVEMENT_MULT;
-    public float DEFAULT_DASH_COOLDOWN = 5.0f;
-    public float DEFAULT_DIVE_SPEED = 4.0f;
-    public float DEFAULT_DIVE_TIME;
-    public float ROLL_SPEED = 2.0f;
-    public float ROLL_TIME;
+    public float d_MovementMultX; // the default movement multiplier along the X axis
+    public float d_MovementMultY; // the default movement multiplier along the Y axis
+    public float d_DashCooldown = 5.0f; // the default dash cooldown
+    public float d_DiveSpeed = 4.0f; // the default 
+    public float d_DashTime;
 
-    private GameLogic gameLogic;
+    private GameLogic m_GameLogic;
 
     // used to change animator state
-    public Animator animator;
+    public Animator m_Animator;
 
     // used to track player health
-    public Health health;
+    public Health m_Health;
 
     // used to shoot and change weapons
-    public Guns guns;
+    public Guns m_Guns;
 
     // used to use melee attacks and change weapons
-    public MeleeWeapons melees;
+    public MeleeWeapons m_Melees;
 
     // used to utilise the physics engine
-    public Rigidbody2D rb;
+    public Rigidbody2D m_rb;
 
-    public GameObject crosshair; // the crosshair's location
-    public GameObject bulletPrefab; // prefab for bullets
+    // used to set health on HUD
+    public Text healthHUD;
+    public Text dashHUD;
 
-    public int dashing; // 0 = not dashing, 1 = diving, 2 = rolling
-    private float dashDist; // the distance remaining in the dash
-    private Vector3 dashDir; // the direction of the sprint
-    private float dashCooldownTime; // the time the dash is available
+    public GameObject m_Crosshair; // the crosshair's location
+    public GameObject m_BulletPrefab; // prefab for bullets
 
-    public float x_movement_mult;
-    public float y_movement_mult;
-    public float dash_cooldown;
-    public float dive_speed;
-    public float dive_time;
+    public int m_Dashing; // 0 = not dashing, 1 = diving, 2 = rolling
+    private float t_DashTime; // the distance remaining in the dash
+    private Vector3 m_DashDir; // the direction of the sprint
+    private float t_DashCooldownTime; // the time the dash is available
+
+    public float m_MovementMultX;
+    public float m_MovementMultY;
+    public float m_DashCooldown;
+    public float m_DiveSpeed;
+    public float m_DashTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogic>();
-        dashing = 0;
-        dashCooldownTime = 0.0f;
+        m_GameLogic = FindObjectOfType<GameLogic>();
+        m_Dashing = 0;
+        t_DashCooldownTime = 0.0f;
         m_vel = Vector2.zero;
 
-        x_movement_mult = DEFAULT_X_MOVEMENT_MULT;
-        y_movement_mult = DEFAULT_Y_MOVEMENT_MULT;
-        dash_cooldown = DEFAULT_DASH_COOLDOWN;
-        dive_speed = DEFAULT_DIVE_SPEED;
-        dive_time = DEFAULT_DIVE_TIME;
+        m_MovementMultX = d_MovementMultX;
+        m_MovementMultY = d_MovementMultY;
+        m_DashCooldown = d_DashCooldown;
+        m_DiveSpeed = d_DiveSpeed;
+        m_DashTime = d_DashTime;
     }
 
     // Update is called once per frame
@@ -66,7 +69,7 @@ public class Player : MonoBehaviour
     {
         MoveCrosshair();
         // skip update if game is in cutscene or dialog
-        if (!gameLogic.DoGameplay()) return;
+        if (!m_GameLogic.DoGameplay()) return;
 
         // get & set horizontal and vertical movement
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
@@ -77,30 +80,30 @@ public class Player : MonoBehaviour
         // shoot if this is the first frame M1 was pressed
         if (Input.GetMouseButton(0))
         {
-            guns.Shoot();
+            m_Guns.Shoot();
         }
 
         // melee if this is the first frame M1 was pressed
         if (Input.GetMouseButton(1))
         {
-            melees.Swing();
+            m_Melees.Swing();
         }
 
         // hot-swap gun if a number was pressed
-        if (Input.GetKeyDown("1")) guns.ChangeGun(0);
-        else if (Input.GetKeyDown("2")) guns.ChangeGun(1);
-        else if (Input.GetKeyDown("3")) guns.ChangeGun(2);
+        if (Input.GetKeyDown("1")) m_Guns.ChangeGun(0);
+        else if (Input.GetKeyDown("2")) m_Guns.ChangeGun(1);
+        else if (Input.GetKeyDown("3")) m_Guns.ChangeGun(2);
 
         // set animator variables
-        animator.SetFloat("Horizontal", movement.x);
-        animator.SetFloat("Vertical", movement.y);
-        animator.SetFloat("Magnitude", movement.magnitude);
+        m_Animator.SetFloat("Horizontal", movement.x);
+        m_Animator.SetFloat("Vertical", movement.y);
+        m_Animator.SetFloat("Magnitude", movement.magnitude);
 
-        rb.velocity = new Vector2(movement.x * x_movement_mult, movement.y * y_movement_mult);
-        if (moveTimer > 0)
+        m_rb.velocity = new Vector2(movement.x * m_MovementMultX, movement.y * m_MovementMultY);
+        if (m_moveTimer > 0)
         {
-            rb.velocity += m_vel;
-            --moveTimer;
+            m_rb.velocity += m_vel;
+            --m_moveTimer;
         }
 
     }
@@ -111,7 +114,7 @@ public class Player : MonoBehaviour
         Vector3 aim = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0.0f);
         aim = Camera.main.ScreenToWorldPoint(aim);
         Vector3 followXOnly = new Vector3(aim.x, aim.y, transform.position.z);
-        crosshair.transform.position = followXOnly;
+        m_Crosshair.transform.position = followXOnly;
     }
 
     /*
@@ -121,58 +124,41 @@ public class Player : MonoBehaviour
     private int Dash(Vector3 movement)
     {
         // if we are starting a dash
-        if (dashing == 0 && Input.GetKeyDown(KeyCode.Space) && dashCooldownTime < Time.time)
+        if (m_Dashing == 0 && Input.GetKeyDown(KeyCode.Space) && t_DashCooldownTime < Time.time)
         {
 
             // start the dash
-            dashing = 1;
-            animator.SetInteger("DashState", 1);
+            m_Dashing = 1;
+            m_Animator.SetInteger("DashState", 1);
 
             // set the direction vector and distance
-            dashDir = movement;
-            dashDist = dive_time;
+            m_DashDir = movement;
+            t_DashTime = m_DashTime;
 
             return 0;
         }
-        else if (dashing == 1) // if we are mid-dive
+        else if (m_Dashing == 1) // if we are mid-dive
         {
             float t = Time.deltaTime; // get time
-            if (dashDist < t) // if this is the last frame of the dive, dive the remaining distance and roll
+            if (t_DashTime < t) // if this is the last frame of the dive, dive the remaining distance and roll
             {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * dive_speed;
-                Debug.Log(rb.velocity);
-                dashing = 2;
-                dashDist = ROLL_TIME;
+                m_rb.velocity = new Vector2(m_DashDir.x, m_DashDir.y) * m_DiveSpeed;
+                Debug.Log(m_rb.velocity);
+                m_Dashing = 0;
+                t_DashTime = d_DashTime;
 
-                animator.SetInteger("DashState", 2);
+                m_Animator.SetInteger("DashState", 0);
+                t_DashCooldownTime = Time.time + m_DashCooldown; // set the cd timer
             }
             else // if this is not the last frame of the dive, dive according to time passed
             {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * dive_speed;
-                dashDist -= t;
+                m_rb.velocity = new Vector2(m_DashDir.x, m_DashDir.y) * m_DiveSpeed;
+                t_DashTime -= t;
             }
 
             if (Input.GetMouseButton(0))
             {
-                guns.Shoot();
-            }
-            return 1;
-        }
-        else if (dashing == 2) // if we are recovering
-        {
-            float t = Time.deltaTime; // get time
-            if (dashDist < t) // if this is the last frame of the roll, roll the remaining distance and end dive
-            {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * ROLL_SPEED;
-
-                dashing = 0;
-                animator.SetInteger("DashState", 0);
-                dashCooldownTime = Time.time + dash_cooldown; // set the cd timer
-            }
-            else
-            {
-                rb.velocity = new Vector2(dashDir.x, dashDir.y) * ROLL_SPEED;
-                dashDist -= t;
+                m_Guns.Shoot();
             }
             return 1;
         }
@@ -189,7 +175,7 @@ public class Player : MonoBehaviour
         if(other.CompareTag("Enemies"))
         {
             float dmg = other.GetComponent<Health>().GetMeleeDamage();
-            health.Damage(dmg);
+            m_Health.Damage(dmg);
         }
 
         // TODO healthpacks and walls interactions
@@ -197,10 +183,8 @@ public class Player : MonoBehaviour
 
     public void Interact()
     {
-
-        gameObject.GetComponent<EquipAbilities>().SetAbilities();
         // get a normalized vector pointing from Daniel to the crosshair
-        Vector3 danielToCrosshair = crosshair.transform.position - transform.position;
+        Vector3 danielToCrosshair = m_Crosshair.transform.position - transform.position;
         danielToCrosshair.Normalize();
 
         // get current position and endpoint of detection raycast
@@ -226,12 +210,16 @@ public class Player : MonoBehaviour
     public void Move(Vector2 vec)
     {
         m_vel = vec;
-        moveTimer = 30;
+        m_moveTimer = 30;
     }
 
     void OnGUI()
     {
-        string str = "Current Health: " + health.GetHealth().ToString();
-        GUI.Label(new Rect(10, 10, 150, 20), str);
+        string str = "Health: " + m_Health.GetHealth().ToString();
+        healthHUD.text = str;
+
+        float dashTime = t_DashCooldownTime - Time.time;
+        if (dashTime > 0) dashHUD.text = "Dash: " + dashTime.ToString("0") + "s";
+        else dashHUD.text = "Dash: 0s";
     }
 }

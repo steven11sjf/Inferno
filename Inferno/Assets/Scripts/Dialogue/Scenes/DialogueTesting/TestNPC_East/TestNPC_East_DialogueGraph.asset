@@ -48,7 +48,10 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: -7003025949639776616}
+        node: {fileID: 4835641999294602470}
+        reroutePoints: []
+      - fieldName: input
+        node: {fileID: 3005629614773963382}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -90,13 +93,13 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: output
+        node: {fileID: 5932203657522589700}
+        reroutePoints: []
+      - fieldName: output
         node: {fileID: -2290274001513887480}
         reroutePoints: []
       - fieldName: output
-        node: {fileID: -7252938127376130255}
-        reroutePoints: []
-      - fieldName: output
-        node: {fileID: 5932203657522589700}
+        node: {fileID: 4835641999294602470}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -326,16 +329,13 @@ MonoBehaviour:
       - fieldName: input
         node: {fileID: -7252938127376130255}
         reroutePoints: []
-      - fieldName: input
-        node: {fileID: 3005629614773963382}
-        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
   input: {fileID: 0}
   output: {fileID: 0}
-  character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
+  character: {fileID: 11400000, guid: 4ba86b4e610005441b3c1c90d4867f34, type: 2}
   isDialogueEnd: 0
   text: Hello! I'm the Dialogue Testing NPC. What dialogue would you like to test?
   answers:
@@ -365,7 +365,8 @@ MonoBehaviour:
   - {fileID: -2290274001513887480}
   - {fileID: -7003025949639776616}
   - {fileID: 3005629614773963382}
-  current: {fileID: -303320518650020560}
+  - {fileID: 4835641999294602470}
+  current: {fileID: 5932203657522589700}
   sceneGraph: {fileID: 0}
 --- !u!114 &3005629614773963382
 MonoBehaviour:
@@ -380,7 +381,7 @@ MonoBehaviour:
   m_Name: Change Avatar
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -136, y: 104}
+  position: {x: 472, y: 392}
   ports:
     keys:
     - input
@@ -391,8 +392,8 @@ MonoBehaviour:
       _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: answers 2
-        node: {fileID: -303320518650020560}
+      - fieldName: output
+        node: {fileID: -7252938127376130255}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -410,6 +411,66 @@ MonoBehaviour:
   input: {fileID: 0}
   output: {fileID: 0}
   source: {fileID: -2852443166016097488, guid: 25b6fcea5b979b0439cafe58602eb5be, type: 3}
+--- !u!114 &4835641999294602470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d4b035e8545a04ca8b7c9c33635bcb, type: 3}
+  m_Name: Chat
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 456, y: 152}
+  ports:
+    keys:
+    - answers
+    - input
+    - output
+    values:
+    - _fieldName: answers
+      _node: {fileID: 4835641999294602470}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Dialogue.Chat+Answer,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 4835641999294602470}
+      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -7252938127376130255}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: output
+      _node: {fileID: 4835641999294602470}
+      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -7003025949639776616}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  input: {fileID: 0}
+  output: {fileID: 0}
+  character: {fileID: 11400000, guid: 4ba86b4e610005441b3c1c90d4867f34, type: 2}
+  isDialogueEnd: 0
+  text: Also check out what I can do! <wave>I'm a crosshair!</wave>
+  answers: []
 --- !u!114 &5932203657522589700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +529,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 4ba86b4e610005441b3c1c90d4867f34, type: 2}
   isDialogueEnd: 0
-  text: 'Here is <size=30>large text!</size>
+  text: 'Here is <size=60>large text!</size>
 
-    Here is <size=8>tiny text!</size>'
+    Here is <size=15>tiny text!</size>'
   answers: []

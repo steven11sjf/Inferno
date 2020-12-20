@@ -53,7 +53,7 @@ public class Sword : MonoBehaviour
         Debug.Log("Collided");
 
         if (other == player) return; // ignore player collisions
-
+        /*
         // check if hit wall
         if (other.CompareTag("Walls"))
         {
@@ -62,7 +62,7 @@ public class Sword : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        */
         if (other.CompareTag("Enemies"))
         {
             // damage enemy

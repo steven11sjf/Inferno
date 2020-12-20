@@ -17,7 +17,7 @@ public class Ability : MonoBehaviour
     protected AbilityEffect[] effects;
 
     [SerializeField]
-    protected string name;
+    protected new string name;
     [SerializeField]
     protected string description;
 

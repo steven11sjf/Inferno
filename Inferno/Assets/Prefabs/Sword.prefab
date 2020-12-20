@@ -148,6 +148,6 @@ MonoBehaviour:
   player: {fileID: 0}
   length: 1
   speed: -540
-  damage: 1
+  damage: 26
   swingLength: 5000
   initAngle: 0

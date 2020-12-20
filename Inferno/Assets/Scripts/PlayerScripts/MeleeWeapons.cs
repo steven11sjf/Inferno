@@ -29,7 +29,7 @@ struct Melee
 
 public class MeleeWeapons : MonoBehaviour
 {
-    public GameObject crosshair;
+    private GameObject crosshair;
 
     public GameObject swordPrefab;
 
@@ -44,6 +44,8 @@ public class MeleeWeapons : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        crosshair = gameObject.GetComponent<Player>().m_Crosshair;
+
         melees = new Melee[numMelees];
         melees[0] = new Melee("Sword", 15.0f, 3.0f, 90.0f, 180.0f, -1080.0f, 0.5f);
         melees[1] = new Melee("Sword", 60.0f, 2.0f, -90.0f, 180.0f, 180.0f, 1.0f);

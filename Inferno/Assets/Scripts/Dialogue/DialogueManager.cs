@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Dialogue;
-using System.Runtime.InteropServices;
-using System.Linq;
-using System.CodeDom;
 using TMPro;
 using TMPro.Examples;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -21,6 +14,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject MainDialogueBox;
     public Text decisionChoice1, decisionChoice2, decisionChoice3;
     public Image playerAvatar;
+    public GameObject regularHUD;
 
     private Text NameText;
     private TMP_Text MessageText;
@@ -115,6 +109,8 @@ public class DialogueManager : MonoBehaviour
     /// <param name="graph">The dialogue tree</param>
     public void StartDialogue(DialogueGraph graph)
     {
+        regularHUD.SetActive(false);
+
         inDialogue = true;
         dialogue = graph;
 
@@ -476,6 +472,8 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     public void EndDialogue()
     {
+        regularHUD.SetActive(true);
+
         inDialogue = false;
         current = null;
         dialogue = null;

@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipAbilities : MonoBehaviour
 {
     public Player player;
+    public Text abilityHUD;
 
     public int numAbilities = 3;
     public Ability[] abilities;
@@ -20,9 +22,6 @@ public class EquipAbilities : MonoBehaviour
         player = FindObjectOfType<Player>();
 
         abilities = new Ability[numAbilities];
-        abilities[0] = ability1;
-        abilities[1] = ability2;
-        abilities[2] = ability3;
     }
 
     /*
@@ -32,9 +31,9 @@ public class EquipAbilities : MonoBehaviour
     {
         ResetToDefaultParameters();
 
-        foreach(Ability a in abilities)
+        foreach (Ability a in abilities)
         {
-            if (a == null) return;
+            if (a == null) continue;
             Debug.Log("Setting ability " + a.GetId());
 
             AbilityEffect[] ae = a.GetEffects();
@@ -51,14 +50,14 @@ public class EquipAbilities : MonoBehaviour
      */
     private void ResetToDefaultParameters()
     {
-        player.x_movement_mult = player.DEFAULT_X_MOVEMENT_MULT;
-        player.y_movement_mult = player.DEFAULT_Y_MOVEMENT_MULT;
+        player.m_MovementMultX = player.d_MovementMultX;
+        player.m_MovementMultY = player.d_MovementMultY;
 
-        player.dash_cooldown = player.DEFAULT_DASH_COOLDOWN;
-        player.dive_speed = player.DEFAULT_DIVE_SPEED;
-        player.dive_time = player.DEFAULT_DIVE_TIME;
+        player.m_DashCooldown = player.d_DashCooldown;
+        player.m_DiveSpeed = player.d_DiveSpeed;
+        player.m_DashTime = player.d_DashTime;
 
-        player.guns.ResetToDefault();
+        player.m_Guns.ResetToDefault();
     }
 
     /*
@@ -71,19 +70,19 @@ public class EquipAbilities : MonoBehaviour
         {
             // Y axis movement
             case 1001:
-                player.y_movement_mult *= effect.effects["movementSpeed"];
+                player.m_MovementMultY *= effect.effects["movementSpeed"];
                 break;
 
             // X axis movement
             case 1002:
-                player.x_movement_mult *= effect.effects["movementSpeed"];
+                player.m_MovementMultX *= effect.effects["movementSpeed"];
                 break;
 
             // dash
             case 1003:
-                player.dash_cooldown *= effect.effects["dashCooldown"];
-                player.dive_speed *= effect.effects["dashSpeed"];
-                player.dive_time *= effect.effects["dashTime"];
+                player.m_DashCooldown *= effect.effects["dashCooldown"];
+                player.m_DiveSpeed *= effect.effects["dashSpeed"];
+                player.m_DashTime *= effect.effects["dashTime"];
                 break;
 
             // sword swing
@@ -93,15 +92,15 @@ public class EquipAbilities : MonoBehaviour
 
             // gun settings
             case 3001:
-                player.guns.swap_time *= effect.effects["gunSwapTime"];
+                player.m_Guns.swap_time *= effect.effects["gunSwapTime"];
                 break;
 
             // pistol
             case 3002:
-                player.guns.ChangeGunProperty(0, "damage", effect.effects["pistolDmg"]);
-                player.guns.ChangeGunProperty(0, "fireRate", effect.effects["pistolFireRate"]);
-                player.guns.ChangeGunProperty(0, "spread", effect.effects["pistolSpread"]);
-                player.guns.ChangeGunProperty(0, "speed", effect.effects["pistolBulletSpeed"]);
+                player.m_Guns.ChangeGunProperty(0, "damage", effect.effects["pistolDmg"]);
+                player.m_Guns.ChangeGunProperty(0, "fireRate", effect.effects["pistolFireRate"]);
+                player.m_Guns.ChangeGunProperty(0, "spread", effect.effects["pistolSpread"]);
+                player.m_Guns.ChangeGunProperty(0, "speed", effect.effects["pistolBulletSpeed"]);
                 break;
 
             default:
@@ -113,6 +112,35 @@ public class EquipAbilities : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown("z"))
+        {
+            if (abilities[0]) abilities[0] = null;
+            else abilities[0] = ability1;
+            SetAbilities();
+        }
+
+        if (Input.GetKeyDown("x"))
+        {
+            if (abilities[1]) abilities[1] = null;
+            else abilities[1] = ability2;
+            SetAbilities();
+        }
+
+        if (Input.GetKeyDown("c"))
+        {
+            if (abilities[2]) abilities[2] = null;
+            else abilities[2] = ability3;
+            SetAbilities();
+        }
+    }
+
+    private void OnGUI()
+    {
+        string res = "Abilities:\n";
+        if(abilities[0]) res += abilities[0].name + "\n";
+        if(abilities[1]) res += abilities[1].name + "\n";
+        if(abilities[2]) res += abilities[2].name;
+
+        abilityHUD.text = res;
     }
 }
