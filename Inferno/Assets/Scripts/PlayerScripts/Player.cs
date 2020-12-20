@@ -203,6 +203,11 @@ public class Player : MonoBehaviour
                 other.GetComponent<DialogueSceneGraph>().StartDialogue();
                 return;
             }
+            if(other.CompareTag("Walls"))
+            {
+                // can't interact through walls
+                return;
+            }
         }
         
     }
