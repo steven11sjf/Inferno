@@ -28,6 +28,7 @@ struct Gun
 public class Guns : MonoBehaviour
 {
     public float GUN_SWAP_TIME;
+    public float BULLET_SPEED_RANGE;
     private GameObject player;
     private GameObject crosshair;
     public GameObject bulletPrefab;
@@ -67,7 +68,7 @@ public class Guns : MonoBehaviour
 
             // fire bullet in the direction of the crosshair
             Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.velocity = new Vector2(spreadAdjusted.x, spreadAdjusted.y) * guns[selectedGun].speed;
+            bulletScript.velocity = new Vector2(spreadAdjusted.x, spreadAdjusted.y) * guns[selectedGun].speed * (1.0f + Random.Range(0, BULLET_SPEED_RANGE));
             bulletScript.instantiator = player;
             bulletScript.damage = guns[selectedGun].damage;
         }
@@ -88,7 +89,7 @@ public class Guns : MonoBehaviour
         gun_defaults = new Gun[numGuns];
         guns = new Gun[numGuns];
         gun_defaults[0] = new global::Gun("Pistol", 15.0f, 1.0f, 0.0f, 6.0f, 1);
-        gun_defaults[1] = new global::Gun("Shotgun", 3.0f, 2.0f, 10.0f, 10.0f, 20);
+        gun_defaults[1] = new global::Gun("Shotgun", 7.0f, 2.0f, 10.0f, 10.0f, 8);
         gun_defaults[2] = new global::Gun("SMG", 4.0f, 0.1f, 2.5f, 3.0f, 1);
 
         guns[0] = gun_defaults[0];

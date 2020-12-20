@@ -4,43 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipAbilities : MonoBehaviour
+public class EquipBadges : MonoBehaviour
 {
     public Player player;
-    public Text abilityHUD;
+    public Text badgeHUD;
 
-    public int numAbilities = 3;
-    public Ability[] abilities;
+    public int numBadges = 3;
+    public Badge[] badges;
 
-    public Ability ability1;
-    public Ability ability2;
-    public Ability ability3;
+    public Badge badge1;
+    public Badge badge2;
+    public Badge badge3;
 
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<Player>();
 
-        abilities = new Ability[numAbilities];
+        badges = new Badge[numBadges];
     }
 
     /*
      * Sets the ability effects. Should be called on scene load for levels, but for testing purposes it's bound to interact.
      */
-    public void SetAbilities()
+    public void SetBadges()
     {
         ResetToDefaultParameters();
 
-        foreach (Ability a in abilities)
+        foreach (Badge b in badges)
         {
-            if (a == null) continue;
-            Debug.Log("Setting ability " + a.GetId());
+            if (b == null) continue;
+            Debug.Log("Setting badge " + b.GetId());
 
-            AbilityEffect[] ae = a.GetEffects();
-            foreach (AbilityEffect effect in ae)
+            BadgeEffect[] be = b.GetEffects();
+            foreach (BadgeEffect effect in be)
             {
-                Debug.Log("Setting ability effect for " + effect.idNumber);
-                SetAbilityEffect(effect);
+                Debug.Log("Setting badge effect for " + effect.idNumber);
+                SetBadgeEffect(effect);
             }
         }
     }
@@ -63,7 +63,7 @@ public class EquipAbilities : MonoBehaviour
     /*
      * Sets the ability effects for an ability effect. Called by SetAbilities().
      */
-    void SetAbilityEffect(AbilityEffect effect)
+    void SetBadgeEffect(BadgeEffect effect)
     {
         float[] param = new float[10];
         switch(effect.idNumber)
@@ -103,6 +103,15 @@ public class EquipAbilities : MonoBehaviour
                 player.m_Guns.ChangeGunProperty(0, "speed", effect.effects["pistolBulletSpeed"]);
                 break;
 
+            // shotgun
+            case 3003:
+                player.m_Guns.ChangeGunProperty(1, "damage", effect.effects["shotgunDmg"]);
+                player.m_Guns.ChangeGunProperty(1, "fireRate", effect.effects["shotgunFireRate"]);
+                player.m_Guns.ChangeGunProperty(1, "spread", effect.effects["shotgunSpread"]);
+                player.m_Guns.ChangeGunProperty(1, "speed", effect.effects["shotgunBulletSpeed"]);
+                player.m_Guns.ChangeGunProperty(1, "projectiles", effect.effects["shotgunNumProj"]);
+                break;
+
             default:
                 Debug.Log("Invalid ID Number: " + effect.idNumber);
                 break;
@@ -114,33 +123,33 @@ public class EquipAbilities : MonoBehaviour
     {
         if (Input.GetKeyDown("z"))
         {
-            if (abilities[0]) abilities[0] = null;
-            else abilities[0] = ability1;
-            SetAbilities();
+            if (badges[0]) badges[0] = null;
+            else badges[0] = badge1;
+            SetBadges();
         }
 
         if (Input.GetKeyDown("x"))
         {
-            if (abilities[1]) abilities[1] = null;
-            else abilities[1] = ability2;
-            SetAbilities();
+            if (badges[1]) badges[1] = null;
+            else badges[1] = badge2;
+            SetBadges();
         }
 
         if (Input.GetKeyDown("c"))
         {
-            if (abilities[2]) abilities[2] = null;
-            else abilities[2] = ability3;
-            SetAbilities();
+            if (badges[2]) badges[2] = null;
+            else badges[2] = badge3;
+            SetBadges();
         }
     }
 
     private void OnGUI()
     {
-        string res = "Abilities:\n";
-        if(abilities[0]) res += abilities[0].name + "\n";
-        if(abilities[1]) res += abilities[1].name + "\n";
-        if(abilities[2]) res += abilities[2].name;
+        string res = "Badges:\n";
+        if(badges[0]) res += badges[0].name + "\n";
+        if(badges[1]) res += badges[1].name + "\n";
+        if(badges[2]) res += badges[2].name;
 
-        abilityHUD.text = res;
+        badgeHUD.text = res;
     }
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementPlus : Ability
+public class MovementPlus : Badge
 {
     // Start is called before the first frame update
     void Start()
     {
-        effects = new AbilityEffect[3];
+        effects = new BadgeEffect[3];
 
         effects[0].idNumber = 1001;
         effects[0].effects = new Dictionary<string, float>();

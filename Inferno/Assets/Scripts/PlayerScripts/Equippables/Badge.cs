@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct AbilityEffect
+public struct BadgeEffect
 {
     public int idNumber;
     public IDictionary<string, float> effects;
 
 }
 
-public class Ability : MonoBehaviour
+public class Badge : MonoBehaviour
 {
     [SerializeField]
     protected int id;
     [SerializeField]
-    protected AbilityEffect[] effects;
+    protected BadgeEffect[] effects;
 
     [SerializeField]
     protected new string name;
@@ -24,5 +24,5 @@ public class Ability : MonoBehaviour
     public int GetId() { return id; }
     public string GetName() { return name; }
     public string GetDescription() { return description; }
-    public AbilityEffect[] GetEffects() { return effects; }
+    public BadgeEffect[] GetEffects() { return effects; }
 }
