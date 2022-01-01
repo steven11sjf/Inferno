@@ -1,49 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8736261412848952242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8033ebb924d43464ab3c372c8457585f, type: 3}
-  m_Name: Event
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 1160, y: -280}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: -8736261412848952242}
-      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: output
-        node: {fileID: 8700584396628372114}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: -8736261412848952242}
-      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  input: {fileID: 0}
-  output: {fileID: 0}
-  actionName: EndDialogue
-  args: []
 --- !u!114 &-8474140748660822778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,8 +176,8 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
   isDialogueEnd: 0
-  text: I'm gonna get to <color=yellow>Satan's Ice Castle</color> and smoke a fat
-    bowl with the <color=blue>king of evil</color>!
+  text: I'm gonna get to <color=yellow>Satan's Castle</color> and see what sorta
+    pot they have down here!
   answers: []
 --- !u!114 &-1248338625484803558
 MonoBehaviour:
@@ -249,6 +205,12 @@ MonoBehaviour:
       connections:
       - fieldName: output
         node: {fileID: 1024873381014791413}
+        reroutePoints: []
+      - fieldName: output
+        node: {fileID: 8700584396628372114}
+        reroutePoints: []
+      - fieldName: output
+        node: {fileID: 2229277449187576081}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -325,7 +287,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 0f7e5114a3a4d2e419c00e61ba6132c7, type: 2}
   isDialogueEnd: 0
-  text: I'm gonna make a <b>TikTok Documentary</b> of <color=yellow>Hell</color>
+  text: I'm gonna <b>make a Facebook Live stream</b> of <color=yellow>Hell</color>
     and show the world what it's <wave>really</wave> like here!
   answers: []
 --- !u!114 &11400000
@@ -346,14 +308,12 @@ MonoBehaviour:
   - {fileID: 8647899559369648067}
   - {fileID: -8348396356007441459}
   - {fileID: 8700584396628372114}
-  - {fileID: -8736261412848952242}
   - {fileID: -146474332085439599}
   - {fileID: 1024873381014791413}
   - {fileID: -1248338625484803558}
   - {fileID: -7948405420515350427}
   - {fileID: 2229277449187576081}
-  - {fileID: 8166783863737199453}
-  current: {fileID: 1024873381014791413}
+  current: {fileID: 8700584396628372114}
   sceneGraph: {fileID: 0}
 --- !u!114 &1024873381014791413
 MonoBehaviour:
@@ -413,7 +373,8 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 666ebdfc98daeae4a958bfb8009b53bc, type: 2}
   isDialogueEnd: 0
-  text: What are ya, a 12 year old girl? Fuck outta here!
+  text: ... Like the boiling lava pools and eternal damnation? Who would want to
+    watch that?
   answers: []
 --- !u!114 &2229277449187576081
 MonoBehaviour:
@@ -463,7 +424,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: 8166783863737199453}
+        node: {fileID: -1248338625484803558}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -473,7 +434,7 @@ MonoBehaviour:
   output: {fileID: 0}
   character: {fileID: 11400000, guid: 666ebdfc98daeae4a958bfb8009b53bc, type: 2}
   isDialogueEnd: 0
-  text: Well, <pause=0.5>shit, why not? <wave>Bring me along too!</wave>
+  text: Well, <pause=0.5>why not? <wave>Bring me along too!</wave>
   answers: []
 --- !u!114 &6087757414043857678
 MonoBehaviour:
@@ -536,53 +497,8 @@ MonoBehaviour:
   text: 'This is the <wave>eighth circle!</wave>
 
     This is <color=blue>Steven</color>''s
-    little hellhole... mostly because he always works on this at <i>stupid late</i>
-    hours!'
+    area... mostly because they always work on this at <i>stupid late</i> hours!'
   answers: []
---- !u!114 &8166783863737199453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8033ebb924d43464ab3c372c8457585f, type: 3}
-  m_Name: Event
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 1201.5, y: 206}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: 8166783863737199453}
-      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: output
-        node: {fileID: 2229277449187576081}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: 8166783863737199453}
-      _typeQualifiedName: Dialogue.DialogueBaseNode, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  input: {fileID: 0}
-  output: {fileID: 0}
-  actionName: EndDialogue
-  args: []
 --- !u!114 &8647899559369648067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,7 +649,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: -8736261412848952242}
+        node: {fileID: -1248338625484803558}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
