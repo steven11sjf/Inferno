@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Dialogue;
 using UnityEngine;
+using UnityEngine.UI;
 using XNode;
 
 public abstract class DialogueSceneGraph : MonoBehaviour {
@@ -14,6 +16,11 @@ public abstract class DialogueSceneGraph : MonoBehaviour {
     public void Start()
     {
         gameLogic = FindObjectOfType<GameLogic>();
+    }
+
+    internal void ChangeAvatar(Sprite source)
+    {
+        gameLogic.ChangeAvatar(source);
     }
 
     /// <summary>
@@ -29,7 +36,26 @@ public abstract class DialogueSceneGraph : MonoBehaviour {
     /// </summary>
     /// <param name="action">The name of the action</param>
     /// <param name="args">The parameters for the action, if any</param>
-    public abstract void DoCutsceneAction(string action, string[] args);
+    public void DoCutsceneAction(string action, string[] args)
+    {
+        switch (action)
+        {
+            case "EndDialogue":
+                gameLogic.EndDialogue();
+                break;
+
+            default:
+                DoCustomCutsceneAction(action, args);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Starts a cutscene action that is custom to the scene
+    /// </summary>
+    /// <param name="action">The name of the action</param>
+    /// <param name="args">The parameters for the action, if any</param>
+    public abstract void DoCustomCutsceneAction(string action, string[] args);
 
     /// <summary>
     /// Updates a variable used in the dialogue graph

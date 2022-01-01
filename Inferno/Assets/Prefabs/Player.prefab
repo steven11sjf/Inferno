@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5203860726923884726}
   - component: {fileID: 5203860726923886412}
   - component: {fileID: 5203860726923886413}
+  - component: {fileID: 1030776599}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -102,21 +103,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_vel: {x: 0, y: 0}
-  moveTimer: 0
-  DASH_COOLDOWN: 5
-  DIVE_SPEED: 6
-  DIVE_TIME: 0.25
-  ROLL_SPEED: 2
-  ROLL_TIME: 0.75
-  animator: {fileID: 5203860726923886409}
-  health: {fileID: 5203860726923884727}
-  guns: {fileID: 5203860726923886412}
-  melees: {fileID: 5203860726923886413}
-  rb: {fileID: 5203860726923884726}
-  crosshair: {fileID: 0}
-  bulletPrefab: {fileID: 3910270944117973169, guid: 1739e4fb054e4774894ebc6544a0f06b,
+  m_moveTimer: 0
+  d_MovementMultX: 1
+  d_MovementMultY: 1
+  d_DashCooldown: 5
+  d_DiveSpeed: 4
+  d_DashTime: 1
+  m_Animator: {fileID: 5203860726923886409}
+  m_Health: {fileID: 5203860726923884727}
+  m_Guns: {fileID: 5203860726923886412}
+  m_Melees: {fileID: 5203860726923886413}
+  m_rb: {fileID: 5203860726923884726}
+  healthHUD: {fileID: 0}
+  m_Crosshair: {fileID: 0}
+  m_BulletPrefab: {fileID: 3910270944117973169, guid: 1739e4fb054e4774894ebc6544a0f06b,
     type: 3}
-  dashing: 0
+  m_Dashing: 0
+  m_MovementMultX: 0
+  m_MovementMultY: 0
+  m_DashCooldown: 0
+  m_DiveSpeed: 0
+  m_DashTime: 0
 --- !u!95 &5203860726923886409
 Animator:
   serializedVersion: 3
@@ -177,6 +184,7 @@ MonoBehaviour:
   maxHealth: 100
   gameLogic: {fileID: 0}
   meleeDamage: 0
+  currHealth: 0
 --- !u!50 &5203860726923884726
 Rigidbody2D:
   serializedVersion: 4
@@ -211,12 +219,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GUN_SWAP_TIME: 0.5
-  player: {fileID: 5203860726923884724}
-  crosshair: {fileID: 0}
   bulletPrefab: {fileID: 3910270944117973169, guid: 1739e4fb054e4774894ebc6544a0f06b,
     type: 3}
   selectedGun: 1
   numGuns: 3
+  swap_time: 0
 --- !u!114 &5203860726923886413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,8 +236,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd978a918593774a8e008dafd590037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crosshair: {fileID: 0}
   swordPrefab: {fileID: 5430455550067467710, guid: 33df2fbb759356e45822183d069ee8a3,
     type: 3}
   numMelees: 2
   equippedMelee: 0
+--- !u!114 &1030776599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5203860726923884724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a06d892fba510c4b872dbda3e3d4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  abilityHUD: {fileID: 0}
+  numAbilities: 3
+  abilities: []
+  ability1: {fileID: 0}
+  ability2: {fileID: 0}
+  ability3: {fileID: 0}

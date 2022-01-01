@@ -178,7 +178,9 @@ public class Shooter : MonoBehaviour
             // shoot
             // get a normalized vector pointing from shooter to Daniel
             Vector3 shot = player.transform.position - transform.position;
+            Debug.Log(shot);
             shot.Normalize();
+            Debug.Log(shot);
 
             // instantiate a new bullet
             GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
@@ -186,6 +188,7 @@ public class Shooter : MonoBehaviour
             // fire bullet in the direction of daniel
             Bullet bulletScript = bullet.GetComponent<Bullet>();
             bulletScript.velocity = new Vector2(shot.x, shot.y) * BULLET_SPEED;
+            Debug.Log(bulletScript.velocity);
             bulletScript.instantiator = gameObject;
             bulletScript.damage = 7.5f;
 

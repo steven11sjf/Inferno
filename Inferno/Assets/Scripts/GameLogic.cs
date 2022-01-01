@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Dialogue;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour
 {
@@ -12,17 +14,28 @@ public class GameLogic : MonoBehaviour
     public GameObject victoryCondition; // the enemy that needs to be dead for the victory condition
     public DialogueManager dialogueManager; // the conversation manager
 
+    public Text objectiveHUD;
+
     private Health playerHealth; // the Health script for the player
     private Health enemyHealth; // the Health script for the enemy, set in Start()
+
+    internal void ChangeAvatar(Sprite source)
+    {
+        dialogueManager.ChangeAvatar(source);
+    }
+
     private bool paused; // true = paused
     private bool playerAlive; // true = player isn't dead
     private bool won; // true = victoryCondition eliminated
+
+    private float t_timer;
 
     // the state of the game (gameplay, in dialogue, in a cutscene)
     private int state;
     private static int STATE_GAMEPLAY = 0;
     private static int STATE_DIALOGUE = 1;
-    private static int STATE_CUTSCENE = 2;
+    private static int STATE_DEAD = 2;
+    private static int STATE_WON = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +53,20 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // check if player is trying to menu
+        if(Input.GetKeyDown("m"))
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
+
+        if (won || !playerAlive)
+        {
+            Debug.Log(t_timer + " " + Time.time);
+            if (t_timer < Time.time) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+
         if(state == STATE_GAMEPLAY || state == STATE_DIALOGUE)
         {
             cam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
@@ -52,11 +79,13 @@ public class GameLogic : MonoBehaviour
 
             if (paused)
             {
+                objectiveHUD.text = "Paused";
                 PauseAllAnimators();
                 Time.timeScale = 0;
             }
             else
             {
+                objectiveHUD.text = "";
                 UnpauseAllAnimators();
                 Time.timeScale = 1;
             }
@@ -76,10 +105,11 @@ public class GameLogic : MonoBehaviour
         }
 
         // handle victory condition
-        if(enemyHealth.GetHealth() < 0.0f)
+        if(!won && enemyHealth.GetHealth() < 0.0f)
         {
             won = true;
-            Time.timeScale = 0;
+            state = STATE_WON;
+            t_timer = Time.time + 3.0f;
         }
     }
 
@@ -117,9 +147,10 @@ public class GameLogic : MonoBehaviour
     public void PlayerDeath()
     {
         playerAlive = false;
-        Time.timeScale = 0;
-        
+        state = STATE_DEAD;
+
         // TODO: make menu for retry/menu/whatever
+        t_timer = Time.time + 3.0f;
     }
 
     /// <summary>
@@ -154,14 +185,12 @@ public class GameLogic : MonoBehaviour
     {
         if (won)
         {
-            string str = "Victory!";
-            GUI.Label(new Rect(500, 500, 650, 20), str);
+            objectiveHUD.text = "Victory!";
         }
 
         if (!playerAlive)
         {
-            string str = "Dead!";
-            GUI.Label(new Rect(500, 500, 650, 20), str);
+            objectiveHUD.text = "You just took a massive L!";
         }
     }
 

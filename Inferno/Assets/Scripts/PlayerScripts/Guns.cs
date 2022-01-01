@@ -28,16 +28,19 @@ struct Gun
 public class Guns : MonoBehaviour
 {
     public float GUN_SWAP_TIME;
-    public GameObject player;
-    public GameObject crosshair;
+    public float BULLET_SPEED_RANGE;
+    private GameObject player;
+    private GameObject crosshair;
     public GameObject bulletPrefab;
 
     private GameLogic gameLogic;
+    private Gun[] gun_defaults;
     private Gun[] guns;
 
     public int selectedGun; // id of the selected gun
     private float nextShot; // time gun is next ready to fire
     public int numGuns = 3;
+    public float swap_time;
 
     /// <summary>
     /// Fires the gun, if possible
@@ -65,7 +68,7 @@ public class Guns : MonoBehaviour
 
             // fire bullet in the direction of the crosshair
             Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.velocity = new Vector2(spreadAdjusted.x, spreadAdjusted.y) * guns[selectedGun].speed;
+            bulletScript.velocity = new Vector2(spreadAdjusted.x, spreadAdjusted.y) * guns[selectedGun].speed * (1.0f + Random.Range(0, BULLET_SPEED_RANGE));
             bulletScript.instantiator = player;
             bulletScript.damage = guns[selectedGun].damage;
         }
@@ -77,12 +80,21 @@ public class Guns : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = gameObject;
+        crosshair = player.GetComponent<Player>().m_Crosshair;
+        swap_time = GUN_SWAP_TIME;
+
         gameLogic = FindObjectOfType<GameLogic>();
 
+        gun_defaults = new Gun[numGuns];
         guns = new Gun[numGuns];
-        guns[0] = new global::Gun("Pistol", 15.0f, 1.0f, 0.0f, 6.0f, 1);
-        guns[1] = new global::Gun("Shotgun", 3.0f, 2.0f, 10.0f, 10.0f, 20);
-        guns[2] = new global::Gun("SMG", 4.0f, 0.1f, 2.5f, 3.0f, 1);
+        gun_defaults[0] = new global::Gun("Pistol", 15.0f, 1.0f, 0.0f, 6.0f, 1);
+        gun_defaults[1] = new global::Gun("Shotgun", 7.0f, 2.0f, 10.0f, 10.0f, 8);
+        gun_defaults[2] = new global::Gun("SMG", 4.0f, 0.1f, 2.5f, 3.0f, 1);
+
+        guns[0] = gun_defaults[0];
+        guns[1] = gun_defaults[1];
+        guns[2] = gun_defaults[2];
 
         ChangeGun(0); // auto-equip pistol
     }
@@ -100,7 +112,7 @@ public class Guns : MonoBehaviour
 
         selectedGun = gun;
 
-        nextShot = GUN_SWAP_TIME;
+        nextShot = swap_time;
         return 0;
     }
 
@@ -111,6 +123,40 @@ public class Guns : MonoBehaviour
         {
             nextShot -= Time.deltaTime;
             return;
+        }
+    }
+
+    public void ChangeGunProperty(int index, string property, float val)
+    {
+        switch(property)
+        {
+            case "damage":
+                guns[index].damage *= val;
+                break;
+            case "fireRate":
+                guns[index].fireRate *= val;
+                break;
+            case "spread":
+                guns[index].spread *= val;
+                break;
+            case "speed":
+                guns[index].speed *= val;
+                break;
+            case "projectiles":
+                guns[index].projectiles += (int)val;
+                break;
+            default:
+                Debug.LogError("Error: Propery " + property + " not valid!");
+                break;
+        }
+    }
+
+    public void ResetToDefault()
+    {
+        swap_time = GUN_SWAP_TIME;
+        for(int i=0; i<numGuns; i++)
+        {
+            guns[i] = gun_defaults[i];
         }
     }
 }
