@@ -53,12 +53,17 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // check if player is trying to menu
+        if(Input.GetKeyDown("m"))
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
+
         if (won || !playerAlive)
         {
             Debug.Log(t_timer + " " + Time.time);
             if (t_timer < Time.time) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                Debug.Log("pee");
             }
         }
 
@@ -185,7 +190,7 @@ public class GameLogic : MonoBehaviour
 
         if (!playerAlive)
         {
-            objectiveHUD.text = "You fucking donkey";
+            objectiveHUD.text = "You just took a massive L!";
         }
     }
 
