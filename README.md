@@ -1,58 +1,37 @@
 # Inferno
 
-Google Drive link: https://drive.google.com/drive/folders/162jZHDAdWzgksmENo4kC5yEXmS8ZVHbF
+Inferno is a top-down shooter that was in development from May 2020 - February 2020. This prototype was in development from June to December. It implements some of the features that would have been in the final game, including the combat and dialogue systems. Due to issues with other aspects of production such as a struggle finding artists, the project has been shelved for now. 
 
-## Installation
+## Play the game
 
-Download and install [Git for Windows](https://gitforwindows.org/). Put the Git Bash program on your start menu, you'll use it a lot. 
+There is a compiled copy of the game in the latest release that you can download, ignore the Windows Defender notification, you can check the code to see that it's not malicious. Select the version that matches your operating system. I am unable to test the Mac OS X and Linux versions but they are what Unity spat out, but Windows x64 should work. 
 
-Also download and install Unity hub. Get the personal version, it should be all you need. 
+If you want to compile from source, download the repo and Unity editor version 2019.4.1f1. Open it and the project should work correctly. You can play it within the Unity editor or create your own copy using File -> Build and Run (or the shortcut ctrl-B).
 
-Open git bash. Make a folder somewhere (I recommend on the root of the C drive). You access the drive in git bash by typing `cd /c/`. For the purposes of this I will use a folder called `/c/Inferno`. Navigate into this directory in git bash. 
+## Game controls
 
-Make sure you're logged into git. Use `git config --global user.name "Steven Franklin"` (use your name though). also put in your email using `git config --global user.email <email>`. 
+To move, use the WASD keys to move up, left, down, right. You can use the cursor to aim your crosshair. 
 
-Now, to get a local repository type `git clone hyperbola0@github.com/hyperbola0/Inferno.git`. Enter your password when asked. It will clone a repository to your computer. 
+Pressing left-click will fire the gun you have equipped. You can change the gun using the number keys (the ones above QWERTY, not the numpad). 1 equips the pistol, 2 equips the shotgun, 3 equips the SMG. 
 
-You should be able to open the Unity hub and open the project, and it will download the correct version of Unity. Wait for that and double-click that to open the project. It takes a minute the first time while it generates some shaders and other files specific to your computer not in the repo. 
+Pressing right-click will swing a sword for short-range melee damage. 
 
-If you have issues DM me :^)
+The keys Z, X and C are bound to toggle your abilities. In the final game you would be able to swap these out through a menu, but this was not implemented yet. You can swap them in the Unity editor if you really want to play around with them. 
 
-## Branches
+The E key interacts with objects in the direction your cursor is pointing. This currently allows you to talk to other characters in the game. 
 
-Branches can be switched between using `git checkout <branch>`. It's a "version" of the code. `master` is the master-copy and should only be for release/stable versions. `dev` is the equivalent of a nightly build, containing completed features but may contain some bugs or unintended behaviors still.
+In dialogue, you can press E to immediately complete the sentence that is being typed, or proceed to the next dialogue if the typewriter effect is done. Sometimes you are given options for a response which you can select with your cursor. 
 
-## How to add changes
+Pressing escape will pause the game until you press it again. Pressing M on any scene other than the title screen will return you to the title screen. 
 
-First, create an issue in github. Navigate to [the repository](www.github.com/hyperbola0/Inferno) and open the Issues tab. Create a new issue and add a title and description of what you plan to do. Don't forget to choose a label on the right side of the screen. Note the issue number. 
+# Contributions
 
-Next, make sure your local repository is up to date by navigation to `/c/Inferno` in git bash and running `git pull`. Now create a branch using `git checkout -b <new-branch>`. The branch naming convention we use is <label>/<issue-number>-<description>. For example, the branch I'm using for this documentation change is `documentation/10-readme-changes`. 
+Most code is written and (c) Steven Franklin 2020. All rights reserved. 
 
-Next, implement your changes. ***CHECK THE BLUE TEXT ON THE TERMINAL TO MAKE SURE YOU'RE IN THE RIGHT BRANCH!*** It's a total pain in the ass to move staged/committed changes to another branch if you didn't realize you're still in dev or master. This should be straightforward; open Unity and change whatever you were going to. Don't forget to save both the .cs files and the Unity scene (press ctrl-S in the editor). 
+Many of the graphics and textures are also by me. The graphic of the main character Daniel (which is seen in dialogue boxes) is completed by Ryan Olds. All the rest are placeholder art I designed. 
 
-Now, commit your changes to the branch. Go to git bash and type `git status` to check the status of the branch. You'll see a lot of red which is good, it's the files you've changed. Stage your files by typing `git add -A` then `git status` again, they should all be green now which is a pogchamp moment. Next, type `git commit` and it will open a vim file for you to edit. Ignore the commented lines with a # in front of them. Press `i` to enter edit mode. 
+All characters and plot elements are by Tristan Hatchell. 
 
-The commit format we're using is:
+I use the xNode package for dialogue trees, this can be found [on GitHub here](https://github.com/Siccity/xNode). This is distributed under the MIT License. 
 
-```
-<label> (#<issue-number>): <description>
-
-- individual changes
-- try to be somewhat specific, especially if you changed something from your original intentions in the issue
-```
-
-For example:
-
-```
-documentation (#10): README fixes
-
-- Added section explaining how to get a local git repo
-- Added section explaining how branches work
-- Added explanation for how to use issues and branches
-```
-
-When you're done editing the commit message, press escape to exit the editor and then type ":w" and enter to save, then ":q" and enter to quit the editor. You'll see git committing the message. 
-
-Next, we need to push the change to the remote repository. Right now your changes only exist on your machine. Run `git push --set-origin origin <current-branch>`. This pushes it to github's copy, and you should see the commit referenced if you open your issues page. 
-
-Finally, merge into dev. Checkout dev (`git checkout dev`) and run `git merge --no-ff <branch>`. If there are no errors you should see your changes merged into dev. If all has gone well, you can close the issue and be done. 
+Additional thanks goes to the great people behind years-old StackOverflow and Reddit posts, as well as Spotify and various energy drink companies :]
